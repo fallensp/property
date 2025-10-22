@@ -234,6 +234,18 @@ export function UnitDetailsStep({ errors }: StepProps) {
     [updateUnitDetails]
   );
 
+  const toggleFeature = useCallback(
+    (feature: UnitDetails["features"][number]) => {
+      const features = draft.unitDetails.features;
+      const nextFeatures = features.includes(feature)
+        ? features.filter((item) => item !== feature)
+        : [...features, feature];
+
+      update({ features: nextFeatures });
+    },
+    [draft.unitDetails.features, update]
+  );
+
   return (
     <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_280px] xl:grid-cols-[minmax(0,1fr)_320px]">
       <div className="space-y-10">
