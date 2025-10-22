@@ -23,16 +23,6 @@ const furnishingOptions: Array<{
   { value: 'unfurnished', label: 'Unfurnished' }
 ];
 
-const featureOptions = [
-  "Balcony",
-  "Maid room",
-  "Dry kitchen",
-  "Wet kitchen",
-  "Smart lock",
-  "High ceiling",
-  "Private lift"
-];
-
 export function UnitDetailsStep({ errors }: StepProps) {
   const draft = useListingStore((state) => state.draft);
   const updateUnitDetails = useListingStore((state) => state.updateUnitDetails);
@@ -43,13 +33,6 @@ export function UnitDetailsStep({ errors }: StepProps) {
     },
     [updateUnitDetails]
   );
-
-  const toggleFeature = (feature: string) => {
-    const features = draft.unitDetails.features.includes(feature)
-      ? draft.unitDetails.features.filter((item) => item !== feature)
-      : [...draft.unitDetails.features, feature];
-    update({ features });
-  };
 
   return (
     <div className="space-y-8">
@@ -269,34 +252,6 @@ export function UnitDetailsStep({ errors }: StepProps) {
         )}
       </section>
 
-      <section className="space-y-4">
-        <h3 className="text-lg font-semibold">Unit features</h3>
-        <p className="text-sm text-muted-foreground">
-          Highlight optional features to attract the right buyers. These are
-          optional and appear as badges on the listing.
-        </p>
-        <div className="flex flex-wrap gap-2">
-          {featureOptions.map((feature) => {
-            const selected = draft.unitDetails.features.includes(feature);
-            return (
-              <button
-                key={feature}
-                type="button"
-                onClick={() => toggleFeature(feature)}
-                className={cn(
-                  "rounded-full border px-3 py-1 text-xs font-semibold transition",
-                  selected
-                    ? "border-primary bg-primary/10 text-primary"
-                    : "border-border bg-background hover:border-primary/40 hover:bg-muted"
-                )}
-                aria-pressed={selected}
-              >
-                {feature}
-              </button>
-            );
-          })}
-        </div>
-      </section>
     </div>
   );
 }
