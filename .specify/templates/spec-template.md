@@ -18,6 +18,11 @@
   - Tested independently
   - Deployed independently
   - Demonstrated to users independently
+
+  Constitution alignment:
+  - Principle II: Declare the automated tests that will fail before this story is implemented.
+  - Principle III: Capture UX consistency, copy sources, and accessibility checkpoints.
+  - Principle IV: State the performance budget and how it will be measured.
 -->
 
 ### User Story 1 - [Brief Title] (Priority: P1)
@@ -27,6 +32,12 @@
 **Why this priority**: [Explain the value and why it has this priority level]
 
 **Independent Test**: [Describe how this can be tested independently - e.g., "Can be fully tested by [specific action] and delivers [specific value]"]
+
+**Automated Tests**: [List unit/integration/E2E suites that will cover this story]
+
+**Experience & Accessibility Notes**: [Reference design tokens, copy docs, validation states, WCAG considerations]
+
+**Performance Budget**: [Define target metric(s) and measurement approach]
 
 **Acceptance Scenarios**:
 
@@ -43,6 +54,12 @@
 
 **Independent Test**: [Describe how this can be tested independently]
 
+**Automated Tests**: [List unit/integration/E2E suites that will cover this story]
+
+**Experience & Accessibility Notes**: [Reference design tokens, copy docs, validation states, WCAG considerations]
+
+**Performance Budget**: [Define target metric(s) and measurement approach]
+
 **Acceptance Scenarios**:
 
 1. **Given** [initial state], **When** [action], **Then** [expected outcome]
@@ -56,6 +73,12 @@
 **Why this priority**: [Explain the value and why it has this priority level]
 
 **Independent Test**: [Describe how this can be tested independently]
+
+**Automated Tests**: [List unit/integration/E2E suites that will cover this story]
+
+**Experience & Accessibility Notes**: [Reference design tokens, copy docs, validation states, WCAG considerations]
+
+**Performance Budget**: [Define target metric(s) and measurement approach]
 
 **Acceptance Scenarios**:
 
@@ -74,6 +97,8 @@
 
 - What happens when [boundary condition]?
 - How does system handle [error scenario]?
+- Are accessibility fallbacks provided when [assistive technology scenario]?
+- Does latency remain within [performance budget] under [stress condition]?
 
 ## Requirements *(mandatory)*
 
@@ -94,6 +119,24 @@
 
 - **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
 - **FR-007**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
+
+### Testing Requirements *(Principle II)*
+
+- **TR-001**: Automated tests MUST cover [critical behavior] with failing-first assertions.
+- **TR-002**: Integration/E2E tests MUST verify [primary journey] end-to-end.
+- **TR-003**: Regression tests MUST be updated to cover [edge condition or bug fix].
+
+### Experience & Accessibility Requirements *(Principle III)*
+
+- **XR-001**: UX MUST follow [design system tokens/component names].
+- **XR-002**: Copy MUST reference [approved source or content doc].
+- **XR-003**: Accessibility MUST include [focus order, aria labels, contrast checks].
+
+### Performance Requirements *(Principle IV)*
+
+- **PR-001**: [Page/interaction] MUST achieve LCP ≤ [value] on [device/network].
+- **PR-002**: Interactive response MUST stay under [latency] at p95.
+- **PR-003**: Backend/API MUST sustain [load metrics] without breaching budgets.
 
 ### Key Entities *(include if feature involves data)*
 

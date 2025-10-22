@@ -31,7 +31,10 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+- **Quality Guard** (Principle I) — Document lint/static analysis coverage, dependency impacts, and refactoring scope.
+- **Testing Guard** (Principle II) — Define the automated test strategy (unit, integration, E2E) that will fail before implementation succeeds.
+- **Experience Guard** (Principle III) — Reference approved UX patterns, copy sources, accessibility checkpoints, and validation behavior.
+- **Performance Guard** (Principle IV) — Declare measurable budgets (LCP, interaction latency, API p95) and how they will be verified pre-release.
 
 ## Project Structure
 
