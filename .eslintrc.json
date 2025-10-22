@@ -1,0 +1,18 @@
+{
+  "root": true,
+  "extends": ["next/core-web-vitals"],
+  "plugins": ["testing-library", "jest-dom"],
+  "rules": {
+    "@next/next/no-img-element": "off",
+    "testing-library/prefer-screen-queries": "error",
+    "testing-library/no-await-sync-queries": "error",
+    "testing-library/no-debugging-utils": "warn",
+    "jest-dom/prefer-enabled-disabled": "warn",
+    "jest-dom/prefer-checked": "warn"
+  },
+  "settings": {
+    "next": {
+      "rootDir": ["./"]
+    }
+  }
+}

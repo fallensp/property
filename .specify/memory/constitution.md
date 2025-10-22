@@ -1,50 +1,56 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report
+Version change: N/A → 1.0.0
+Modified principles: Created I. Code Quality Excellence; Created II. Verified Testing Discipline; Created III. Consistent Experience Commitment; Created IV. Performance Guardrails
+Added sections: Core Principles; Quality Gates & Metrics; Delivery Workflow & Review; Governance
+Removed sections: None
+Templates requiring updates: .specify/templates/plan-template.md ✅ updated; .specify/templates/spec-template.md ✅ updated; .specify/templates/tasks-template.md ✅ updated; .specify/templates/commands (N/A) ✅ no files present
+Follow-up TODOs: None
+-->
+# Property Project Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Code Quality Excellence
+- Every change MUST pass automated linting, formatting, and static analysis configured for the target stack.
+- Code MUST remain modular with clear ownership boundaries; new dependencies require documented justification in plan.md.
+- Pull requests MUST document the impact on existing architecture and highlight risk areas for reviewers.
+Rationale: Maintaining high-quality code reduces regressions, keeps the codebase approachable, and lowers long-term maintenance cost.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Verified Testing Discipline
+- Feature work MUST include automated tests that fail without the feature and succeed once complete; tests cover happy paths, edge cases, and regressions.
+- UI flows MUST include scripted journeys (integration or E2E) that exercise the user-facing behavior described in specs.
+- Continuous Integration MUST block merges unless the full test suite passes and coverage for touched files stays at or above 80%.
+Rationale: Reliable, automated testing is essential to detect regressions early and protect delivery velocity.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Consistent Experience Commitment
+- User flows MUST follow the approved interaction patterns, copy, and design tokens documented in approved specs or design references.
+- Accessibility MUST meet WCAG 2.1 AA equivalents: keyboard navigation, focus management, and assistive labels cannot regress.
+- Validation, error feedback, and progressive disclosure MUST behave consistently across flow steps, matching spec acceptance criteria.
+Rationale: A predictable experience builds user trust, reduces support load, and keeps the product aligned with brand standards.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Performance Guardrails
+- Initial load for any workflow step MUST keep Largest Contentful Paint under 2.5s on mid-tier hardware and 3G Fast profiles.
+- Interactive actions (form validation, state transitions) MUST respond within 150ms at p95; long operations require visible progress affordances.
+- Backend APIs powering the listing flow MUST maintain <200ms p95 latency under expected peak load; deviations require explicit mitigation plans.
+Rationale: Strong performance maintains usability for agents on constrained networks and protects conversion-critical funnels.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+## Quality Gates & Metrics
+- Plans MUST document code quality impacts, dependency changes, and mitigation strategies before implementation begins (Principle I).
+- Specs MUST define acceptance tests, UX walkthroughs, and accessibility checkpoints covering all prioritized stories (Principle III).
+- Implementation MUST ship with automated test coverage matching new or updated behaviors and update regression suites (Principle II).
+- Performance budgets stated in specs MUST be measured and reported before handoff; failing budgets block release until remediated (Principle IV).
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
-
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
-
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
-
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+## Delivery Workflow & Review
+- Work initiates with research and planning deliverables (`plan.md`, `spec.md`, `tasks.md`) capturing quality, testing, UX, and performance commitments.
+- Each pull request MUST reference the relevant deliverables, list executed automated checks, and summarize performance measurements.
+- Reviewers MUST enforce principle compliance; violations require remediation or an approved rollout plan before merge.
+- Releases MUST include a verification checklist capturing test runs, UX smoke checks, and performance snapshots.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
+- This constitution supersedes conflicting process guidance; all contributors must certify compliance in reviews.
+- Amendments require consensus from at least two maintainers, documentation of rationale, and updates to affected templates before adoption.
+- Versioning follows Semantic Versioning: MAJOR for breaking governance changes, MINOR for new principles or substantive policy expansion, PATCH for clarifications.
+- Compliance is reviewed quarterly via audits of recent plans, specs, and release retrospectives; findings drive corrective actions.
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
-
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2025-10-22 | **Last Amended**: 2025-10-22
