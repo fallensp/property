@@ -22,29 +22,79 @@ type StepProps = {
   errors: Record<string, string>;
 };
 
-const PROPERTY_TYPES = [
-  'Apartment / Condo / Service Residence',
-  'Landed',
-  'Commercial'
+const PROPERTY_TYPES_CONFIG = [
+  {
+    type: 'Bungalow / Villa',
+    subTypes: [
+      'Bungalow',
+      'Zero-Lot Bungalow',
+      'Link Bungalow',
+      'Bungalow Land',
+      'Twin Villas'
+    ]
+  },
+  {
+    type: 'Apartment / Condo / Service Residence',
+    subTypes: ['Flat', 'Apartment', 'Service Residence', 'Condominium']
+  },
+  {
+    type: 'Semi-Detached House',
+    subTypes: ['Semi-Detached House', 'Cluster House']
+  },
+  {
+    type: 'Terrace / Link House',
+    subTypes: [
+      'Terraced House',
+      '1-storey Terraced House',
+      '1.5-storey Terraced House',
+      '2-storey Terrace House',
+      '2.5-storey Terraced House',
+      '3-storey Terraced House',
+      '3.5-storey Terraced House',
+      '4-storey Terraced House',
+      '4.5-storey Terraced House',
+      'Townhouse'
+    ]
+  },
+  {
+    type: 'Residential Land',
+    subTypes: ['Residential Land']
+  }
+] as const;
+
+const PROPERTY_TYPES = PROPERTY_TYPES_CONFIG.map((config) => config.type);
+
+const PROPERTY_SUB_TYPES = PROPERTY_TYPES_CONFIG.reduce<Record<string, string[]>>(
+  (acc, config) => {
+    acc[config.type] = [...config.subTypes];
+    return acc;
+  },
+  {}
+);
+
+const PROPERTY_UNIT_TYPE_OPTIONS = [
+  'Intermediate',
+  'Corner Lot',
+  'End Lot',
+  'Duplex',
+  'Triplex',
+  'Penthouse',
+  'Studio',
+  'Soho',
+  'Loft',
+  'Dual Key',
+  'Prefer not to say'
 ];
 
-const PROPERTY_SUB_TYPES: Record<string, string[]> = {
-  'Apartment / Condo / Service Residence': ['Service Residence', 'Condominium', 'Apartment'],
-  Landed: ['Terrace', 'Semi-Detached', 'Bungalow'],
-  Commercial: ['Office', 'Retail', 'SoHo']
-};
-
-const PROPERTY_UNIT_TYPES: Record<string, string[]> = {
-  'Service Residence': ['Intermediate', 'Corner', 'Penthouse'],
-  Condominium: ['Intermediate', 'Corner'],
-  Apartment: ['Intermediate', 'Corner'],
-  Terrace: ['Intermediate', 'Corner', 'End Lot'],
-  'Semi-Detached': ['Left', 'Right'],
-  Bungalow: ['Standard', 'Premium'],
-  Office: ['Intermediate', 'Corner'],
-  Retail: ['Intermediate', 'Corner'],
-  SoHo: ['Studio', 'Duplex']
-};
+const PROPERTY_UNIT_TYPES = PROPERTY_TYPES_CONFIG.reduce<Record<string, string[]>>(
+  (acc, config) => {
+    config.subTypes.forEach((subType) => {
+      acc[subType] = [...PROPERTY_UNIT_TYPE_OPTIONS];
+    });
+    return acc;
+  },
+  {}
+);
 
 const TITLE_TYPES = ['Individual', 'Strata', 'Master'];
 const BUMI_OPTIONS = ['Do not specify', 'Yes', 'No'];
