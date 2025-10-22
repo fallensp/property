@@ -1,5 +1,20 @@
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { useListingStore } from '@/app/(listing)/listing/create/state/listing-store';
+
+describe('listing-store defaults', () => {
+  beforeEach(() => {
+    useListingStore.getState().reset();
+  });
+
+  afterEach(() => {
+    useListingStore.getState().reset();
+  });
+
+  it('disables validation bypass by default when strict mode is not configured', () => {
+    const { validationBypassEnabled } = useListingStore.getState();
+    expect(validationBypassEnabled).toBe(false);
+  });
+});
 
 describe('listing-store validation', () => {
   beforeEach(() => {

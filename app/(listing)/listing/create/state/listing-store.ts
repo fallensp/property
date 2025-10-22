@@ -175,8 +175,8 @@ const stepOrder: WizardStep[] = [
   'preview'
 ];
 
-const defaultValidationBypassEnabled =
-  process.env.NEXT_PUBLIC_LISTING_WIZARD_STRICT === 'true' ? false : true;
+const isStrictMode = process.env.NEXT_PUBLIC_LISTING_WIZARD_STRICT !== 'false';
+const defaultValidationBypassEnabled = !isStrictMode;
 
 const createEmptyLocation = (): LocationSelection => ({
   searchTerm: '',
