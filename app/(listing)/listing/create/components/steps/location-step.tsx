@@ -60,7 +60,7 @@ export function LocationStep({ errors }: StepProps) {
     updateLocationFields: state.updateLocationFields
   }));
 
-  const location = draft.location ?? {};
+  const location = draft.location ?? ({} as Partial<LocationSelection>);
 
   const [searchTerm, setSearchTerm] = useState(location.searchTerm ?? '');
   const [suggestions, setSuggestions] = useState(mockLocations);
