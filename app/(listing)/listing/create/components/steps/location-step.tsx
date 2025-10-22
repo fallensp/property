@@ -97,6 +97,7 @@ const PROPERTY_UNIT_TYPES = PROPERTY_TYPES_CONFIG.reduce<Record<string, string[]
 );
 
 const TITLE_TYPES = ['Individual', 'Strata', 'Master'];
+const TENURE_OPTIONS = ['Freehold', 'Leasehold'];
 const BUMI_OPTIONS = ['Do not specify', 'Yes', 'No'];
 
 export function LocationStep({ errors }: StepProps) {
@@ -261,14 +262,17 @@ export function LocationStep({ errors }: StepProps) {
             </div>
           </div>
 
-          <div className="space-y-8">
-            <div className="grid gap-6 rounded-xl border border-border bg-background p-6 lg:p-8">
-              <div className="grid gap-6 lg:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor="property-type">Property type *</Label>
-                  <Select
-                    value={location.propertyType ?? ''}
-                    onValueChange={handlePropertyTypeChange}
+          <div className="grid gap-8 rounded-xl border border-border bg-background p-6 lg:p-8">
+            <div className="grid gap-6 lg:grid-cols-3">
+              <div className="space-y-2">
+                <Label htmlFor="property-type">Property type *</Label>
+                <Select
+                  value={location.propertyType ?? ''}
+                  onValueChange={handlePropertyTypeChange}
+                >
+                  <SelectTrigger
+                    id="property-type"
+                    data-testid="property-type-select"
                   >
                     <SelectTrigger
                       id="property-type"
@@ -338,6 +342,24 @@ export function LocationStep({ errors }: StepProps) {
                     <p className="text-sm text-destructive">{errors.propertyUnitType}</p>
                   )}
                 </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="property-tenure">Tenure</Label>
+                <Select
+                  value={location.tenure ?? ''}
+                  onValueChange={(value) => updateLocationFields({ tenure: value })}
+                >
+                  <SelectTrigger id="property-tenure" data-testid="property-tenure-select">
+                    <SelectValue placeholder="Select tenure" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {TENURE_OPTIONS.map((option) => (
+                      <SelectItem key={option} value={option}>
+                        {option}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 
