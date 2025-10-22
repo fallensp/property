@@ -34,6 +34,10 @@ export type ListingDraft = {
   id: string;
   propertyCategory: 'residential' | 'commercial' | 'industrial' | null;
   listingPurpose: 'sale' | 'rent' | null;
+  auctioned: boolean;
+  availabilityMode: 'immediate' | 'scheduled' | null;
+  availableDate: string | null;
+  coAgency: boolean;
   referenceNumber: string;
   location: LocationSelection | null;
   unitDetails: UnitDetails;
@@ -142,11 +146,20 @@ type ListingStoreState = {
   setCoverPhoto: (id: string) => void;
   toggleProjectPhoto: (sampleId: string, selected: boolean) => void;
   selectAllProjectPhotos: (selected: boolean) => void;
-  updateListingType: (payload: {
-    propertyCategory: ListingDraft['propertyCategory'];
-    listingPurpose: ListingDraft['listingPurpose'];
-    referenceNumber: string;
-  }) => void;
+  updateListingType: (
+    payload: Partial<
+      Pick<
+        ListingDraft,
+        | 'propertyCategory'
+        | 'listingPurpose'
+        | 'referenceNumber'
+        | 'auctioned'
+        | 'availabilityMode'
+        | 'availableDate'
+        | 'coAgency'
+      >
+    >
+  ) => void;
   updateLocation: (payload: Partial<LocationSelection>) => void;
   updateUnitDetails: (payload: Partial<UnitDetails>) => void;
   updatePricing: (payload: Partial<Pricing>) => void;
@@ -210,6 +223,10 @@ const createInitialDraft = (): ListingDraft => ({
   id: crypto.randomUUID(),
   propertyCategory: null,
   listingPurpose: null,
+  auctioned: false,
+  availabilityMode: 'immediate',
+  availableDate: null,
+  coAgency: false,
   referenceNumber: '',
   location: null,
   unitDetails: {
