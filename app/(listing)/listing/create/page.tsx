@@ -7,7 +7,6 @@ import { ListingTypeStep } from "@/app/(listing)/listing/create/components/steps
 import { LocationStep } from "@/app/(listing)/listing/create/components/steps/location-step";
 import { UnitDetailsStep } from "@/app/(listing)/listing/create/components/steps/unit-details-step";
 import { PriceStep } from "@/app/(listing)/listing/create/components/steps/price-step";
-import { DescriptionStep } from "@/app/(listing)/listing/create/components/steps/description-step";
 import { PreviewStep } from "@/app/(listing)/listing/create/components/steps/preview-step";
 import { GalleryStep } from "@/app/(listing)/listing/create/components/steps/gallery-step";
 import { ValidationBanner } from "@/app/(listing)/listing/create/components/validation-banner";
@@ -22,7 +21,6 @@ const stepComponentMap: Record<WizardStep, StepComponent> = {
   location: LocationStep,
   unitDetails: UnitDetailsStep,
   price: PriceStep,
-  description: DescriptionStep,
   gallery: GalleryStep,
   preview: PreviewStep,
   platform: PreviewStep

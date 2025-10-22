@@ -1,12 +1,6 @@
 import { expect } from '@playwright/test';
 import { test } from './fixtures/wizard';
 
-const descriptionCopy =
-  'Spacious high-floor residence with panoramic city views and thoughtfully designed open living areas perfect for hosting family and clients alike.';
-
-const headlineCopy =
-  'Skyline-ready condo with unrivalled views';
-
 test.describe('Listing wizard happy path', () => {
   test('completes listing flow with valid data', async ({ gotoWizard, page }) => {
     await gotoWizard();
@@ -67,27 +61,23 @@ test.describe('Listing wizard happy path', () => {
     await expect(nextButton).toBeEnabled();
     await nextButton.click();
 
-    // Step 5 - description
-    await expect(nextButton).toBeDisabled();
-    await page.fill('#headline', headlineCopy);
-    await page.fill('#description', descriptionCopy);
-    await expect(nextButton).toBeEnabled();
-    await nextButton.click();
-
-    // Step 6 - gallery
+    // Step 5 - gallery
     await expect(nextButton).toBeDisabled();
     await page.getByTestId('add-sample-photos').click();
     await expect(nextButton).toBeEnabled();
     await nextButton.click();
 
-    // Step 7 - preview
+    // Step 6 - preview
     await expect(nextButton).toBeDisabled();
     await expect(page.getByText(/listing overview/i)).toBeVisible();
     await expect(page.getByText(/residential/i)).toBeVisible();
     await expect(page.getByText(/sale/i)).toBeVisible();
     await expect(page.getByText(/1250 sqft/)).toBeVisible();
-    await expect(page.getByText(headlineCopy)).toBeVisible();
     await expect(page.getByText(/rm\s?1,500,000/i)).toBeVisible();
+    await expect(page.getByText(/headline not provided/i)).toBeVisible();
+    await expect(
+      page.getByText(/add a compelling description to help buyers fall in love with this property/i)
+    ).toBeVisible();
   });
 
   test('shows validation feedback and preserves state on back navigation', async ({ gotoWizard, page }) => {
@@ -142,12 +132,7 @@ test.describe('Listing wizard happy path', () => {
     await page.fill('#selling-price', '1200000');
     await nextButton.click();
 
-    // Step 5 fill and go back
-    await page.fill('#headline', headlineCopy);
-    await page.fill('#description', `${descriptionCopy} More details about amenities and nearby transit.`);
-    await nextButton.click();
-
-    // Gallery validation occurs
+    // Step 5 - gallery validation occurs
     await nextButton.click();
     await expect(page.getByTestId('validation-banner')).toContainText(
       /add at least 5 photos/i
@@ -158,15 +143,13 @@ test.describe('Listing wizard happy path', () => {
 
     // Navigate back to price step and verify values persisted
     await page.getByTestId('wizard-back').click(); // back to gallery
-    await page.getByTestId('wizard-back').click(); // back to description
     await page.getByTestId('wizard-back').click(); // back to price
     await expect(page.locator('#selling-price')).toHaveValue('1200000');
 
     // Progress forward again
-    await nextButton.click(); // price -> description
-    await nextButton.click(); // description -> gallery
+    await nextButton.click(); // price -> gallery
     await nextButton.click(); // gallery -> preview
 
-    await expect(page.locator('#headline')).toHaveValue(headlineCopy);
+    await expect(page.getByText(/headline not provided/i)).toBeVisible();
   });
 });

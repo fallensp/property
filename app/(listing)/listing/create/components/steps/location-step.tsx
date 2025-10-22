@@ -1,22 +1,22 @@
 "use client";
 
-import { useMemo, useState } from 'react';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
+import { useMemo, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue
-} from '@/components/ui/select';
-import { cn } from '@/lib/utils';
+} from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 import {
   useListingStore,
   type LocationSelection
-} from '@/app/(listing)/listing/create/state/listing-store';
-import { mockLocations, searchLocations } from '@/lib/mock-data/locations';
+} from "@/app/(listing)/listing/create/state/listing-store";
+import { mockLocations, searchLocations } from "@/lib/mock-data/locations";
 
 type StepProps = {
   errors: Record<string, string>;
@@ -24,41 +24,41 @@ type StepProps = {
 
 const PROPERTY_TYPES_CONFIG = [
   {
-    type: 'Bungalow / Villa',
+    type: "Bungalow / Villa",
     subTypes: [
-      'Bungalow',
-      'Zero-Lot Bungalow',
-      'Link Bungalow',
-      'Bungalow Land',
-      'Twin Villas'
+      "Bungalow",
+      "Zero-Lot Bungalow",
+      "Link Bungalow",
+      "Bungalow Land",
+      "Twin Villas"
     ]
   },
   {
-    type: 'Apartment / Condo / Service Residence',
-    subTypes: ['Flat', 'Apartment', 'Service Residence', 'Condominium']
+    type: "Apartment / Condo / Service Residence",
+    subTypes: ["Flat", "Apartment", "Service Residence", "Condominium"]
   },
   {
-    type: 'Semi-Detached House',
-    subTypes: ['Semi-Detached House', 'Cluster House']
+    type: "Semi-Detached House",
+    subTypes: ["Semi-Detached House", "Cluster House"]
   },
   {
-    type: 'Terrace / Link House',
+    type: "Terrace / Link House",
     subTypes: [
-      'Terraced House',
-      '1-storey Terraced House',
-      '1.5-storey Terraced House',
-      '2-storey Terrace House',
-      '2.5-storey Terraced House',
-      '3-storey Terraced House',
-      '3.5-storey Terraced House',
-      '4-storey Terraced House',
-      '4.5-storey Terraced House',
-      'Townhouse'
+      "Terraced House",
+      "1-storey Terraced House",
+      "1.5-storey Terraced House",
+      "2-storey Terrace House",
+      "2.5-storey Terraced House",
+      "3-storey Terraced House",
+      "3.5-storey Terraced House",
+      "4-storey Terraced House",
+      "4.5-storey Terraced House",
+      "Townhouse"
     ]
   },
   {
-    type: 'Residential Land',
-    subTypes: ['Residential Land']
+    type: "Residential Land",
+    subTypes: ["Residential Land"]
   }
 ] as const;
 
@@ -72,55 +72,54 @@ const PROPERTY_SUB_TYPES = PROPERTY_TYPES_CONFIG.reduce<Record<string, string[]>
   {}
 );
 
-const PROPERTY_UNIT_TYPE_OPTIONS = [
-  'Intermediate',
-  'Corner Lot',
-  'End Lot',
-  'Duplex',
-  'Triplex',
-  'Penthouse',
-  'Studio',
-  'Soho',
-  'Loft',
-  'Dual Key',
-  'Prefer not to say'
+const PROPERTY_UNIT_TYPE_BASE = [
+  "Intermediate",
+  "Corner Lot",
+  "End Lot",
+  "Duplex",
+  "Triplex",
+  "Penthouse",
+  "Studio",
+  "Soho",
+  "Loft",
+  "Dual Key",
+  "Prefer not to say"
 ];
 
 const PROPERTY_UNIT_TYPES = PROPERTY_TYPES_CONFIG.reduce<Record<string, string[]>>(
   (acc, config) => {
     config.subTypes.forEach((subType) => {
-      acc[subType] = [...PROPERTY_UNIT_TYPE_OPTIONS];
+      acc[subType] = [...PROPERTY_UNIT_TYPE_BASE];
     });
     return acc;
   },
   {}
 );
 
-const TITLE_TYPES = ['Individual', 'Strata', 'Master'];
-const BUMI_OPTIONS = ['Do not specify', 'Yes', 'No'];
+const TITLE_TYPES = ["Individual", "Strata", "Master"];
+const TENURE_OPTIONS = ["Freehold", "Leasehold"];
+const BUMI_OPTIONS = ["Do not specify", "Yes", "No"];
 
 export function LocationStep({ errors }: StepProps) {
-  const {
-    draft,
-    updateLocation,
-    updateLocationFields
-  } = useListingStore((state) => ({
-    draft: state.draft,
-    updateLocation: state.updateLocation,
-    updateLocationFields: state.updateLocationFields
-  }));
+  const { draft, updateLocation, updateLocationFields } = useListingStore(
+    (state) => ({
+      draft: state.draft,
+      updateLocation: state.updateLocation,
+      updateLocationFields: state.updateLocationFields
+    })
+  );
 
   const location = draft.location ?? ({} as Partial<LocationSelection>);
 
-  const [searchTerm, setSearchTerm] = useState(location.searchTerm ?? '');
+  const [searchTerm, setSearchTerm] = useState(location.searchTerm ?? "");
   const [suggestions, setSuggestions] = useState(mockLocations);
 
   const availableSubTypes = useMemo(() => {
-    return PROPERTY_SUB_TYPES[location.propertyType ?? ''] ?? [];
+    return PROPERTY_SUB_TYPES[location.propertyType ?? ""] ?? [];
   }, [location.propertyType]);
 
   const availableUnitTypes = useMemo(() => {
-    return PROPERTY_UNIT_TYPES[location.propertySubType ?? ''] ?? [];
+    return PROPERTY_UNIT_TYPES[location.propertySubType ?? ""] ?? [];
   }, [location.propertySubType]);
 
   const handleSelect = (selection: LocationSelection) => {
@@ -140,22 +139,22 @@ export function LocationStep({ errors }: StepProps) {
       tenure: selection.tenure,
       completionYear: selection.completionYear,
       titleType: selection.titleType,
-      bumiLot: selection.bumiLot ?? 'Do not specify'
+      bumiLot: selection.bumiLot ?? "Do not specify"
     });
   };
 
   const mapFallbackText = location.developmentName
     ? `Map preview for ${location.developmentName}`
-    : 'Select a location to preview the map';
+    : "Select a location to preview the map";
 
   const handlePropertyTypeChange = (value: string) => {
     const subTypes = PROPERTY_SUB_TYPES[value] ?? [];
-    const firstSub = subTypes[0] ?? '';
-    const unitTypes = PROPERTY_UNIT_TYPES[firstSub] ?? [];
+    const firstSubType = subTypes[0] ?? "";
+    const unitTypes = PROPERTY_UNIT_TYPES[firstSubType] ?? [];
     updateLocationFields({
       propertyType: value,
-      propertySubType: firstSub,
-      propertyUnitType: unitTypes[0] ?? ''
+      propertySubType: firstSubType,
+      propertyUnitType: unitTypes[0] ?? ""
     });
   };
 
@@ -163,7 +162,7 @@ export function LocationStep({ errors }: StepProps) {
     const unitTypes = PROPERTY_UNIT_TYPES[value] ?? [];
     updateLocationFields({
       propertySubType: value,
-      propertyUnitType: unitTypes[0] ?? ''
+      propertyUnitType: unitTypes[0] ?? ""
     });
   };
 
@@ -181,7 +180,9 @@ export function LocationStep({ errors }: StepProps) {
       <section className="grid gap-10 lg:grid-cols-[minmax(0,1.5fr)_minmax(320px,1fr)] xl:grid-cols-[minmax(0,1.75fr)_minmax(360px,1fr)] lg:items-start">
         <div className="space-y-10">
           <div className="space-y-3">
-            <Label htmlFor="location-search">Search development</Label>
+            <Label htmlFor="location-search" className="text-base font-medium">
+              Search development
+            </Label>
             <Input
               id="location-search"
               type="search"
@@ -189,18 +190,18 @@ export function LocationStep({ errors }: StepProps) {
               value={searchTerm}
               onChange={(event) => handleSearchChange(event.target.value)}
               aria-describedby={
-                errors.developmentName ? 'location-error' : undefined
+                errors.developmentName ? "location-error" : undefined
               }
             />
             <p className="text-xs text-muted-foreground">
-              Pick a result to lock it for the listing. Location details cannot be
-              edited after publishing.
+              Select a suggestion to lock the development for this listing. You
+              can refine property details below.
             </p>
-            {errors.developmentName && (
+            {errors.developmentName ? (
               <p id="location-error" className="text-sm text-destructive">
                 {errors.developmentName}
               </p>
-            )}
+            ) : null}
           </div>
 
           <div className="space-y-4">
@@ -216,31 +217,12 @@ export function LocationStep({ errors }: StepProps) {
                     key={suggestion.developmentName}
                     type="button"
                     data-testid={`location-option-${suggestion.developmentName}`}
-                    onClick={() =>
-                      handleSelect({
-                        searchTerm,
-                        developmentName: suggestion.developmentName,
-                        address: suggestion.address,
-                        latitude: suggestion.latitude,
-                        longitude: suggestion.longitude,
-                        propertyType: suggestion.propertyType,
-                        propertySubType: suggestion.propertySubType,
-                        propertyUnitType: suggestion.propertyUnitType,
-                        state: suggestion.state,
-                        city: suggestion.city,
-                        street: suggestion.street,
-                        postalCode: suggestion.postalCode,
-                        tenure: suggestion.tenure,
-                        completionYear: suggestion.completionYear,
-                        titleType: suggestion.titleType,
-                        bumiLot: suggestion.bumiLot
-                      })
-                    }
+                    onClick={() => handleSelect(suggestion)}
                     className={cn(
-                      'rounded-xl border p-4 text-left transition',
+                      "rounded-xl border p-4 text-left transition",
                       selected
-                        ? 'border-primary bg-primary/10'
-                        : 'border-border bg-background hover:border-primary/50 hover:bg-muted'
+                        ? "border-primary bg-primary/10"
+                        : "border-border bg-background hover:border-primary/40 hover:bg-muted"
                     )}
                     aria-pressed={selected}
                   >
@@ -253,20 +235,20 @@ export function LocationStep({ errors }: StepProps) {
                   </button>
                 );
               })}
-              {suggestions.length === 0 && (
+              {suggestions.length === 0 ? (
                 <div className="rounded-xl border border-dashed border-border bg-muted/40 p-6 text-sm text-muted-foreground">
-                  No results found. Refine your search.
+                  No results found. Try a different search term.
                 </div>
-              )}
+              ) : null}
             </div>
           </div>
 
           <div className="grid gap-8 rounded-xl border border-border bg-background p-6 lg:p-8">
-            <div className="grid gap-6 lg:grid-cols-2">
+            <div className="grid gap-6 lg:grid-cols-3">
               <div className="space-y-2">
                 <Label htmlFor="property-type">Property type *</Label>
                 <Select
-                  value={location.propertyType ?? ''}
+                  value={location.propertyType ?? ""}
                   onValueChange={handlePropertyTypeChange}
                 >
                   <SelectTrigger
@@ -283,14 +265,14 @@ export function LocationStep({ errors }: StepProps) {
                     ))}
                   </SelectContent>
                 </Select>
-                {errors.propertyType && (
+                {errors.propertyType ? (
                   <p className="text-sm text-destructive">{errors.propertyType}</p>
-                )}
+                ) : null}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="property-sub-type">Property sub type *</Label>
                 <Select
-                  value={location.propertySubType ?? ''}
+                  value={location.propertySubType ?? ""}
                   onValueChange={handlePropertySubTypeChange}
                   disabled={availableSubTypes.length === 0}
                 >
@@ -308,14 +290,16 @@ export function LocationStep({ errors }: StepProps) {
                     ))}
                   </SelectContent>
                 </Select>
-                {errors.propertySubType && (
-                  <p className="text-sm text-destructive">{errors.propertySubType}</p>
-                )}
+                {errors.propertySubType ? (
+                  <p className="text-sm text-destructive">
+                    {errors.propertySubType}
+                  </p>
+                ) : null}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="property-unit-type">Property unit type *</Label>
                 <Select
-                  value={location.propertyUnitType ?? ''}
+                  value={location.propertyUnitType ?? ""}
                   onValueChange={handlePropertyUnitTypeChange}
                   disabled={availableUnitTypes.length === 0}
                 >
@@ -333,33 +317,87 @@ export function LocationStep({ errors }: StepProps) {
                     ))}
                   </SelectContent>
                 </Select>
-                {errors.propertyUnitType && (
-                  <p className="text-sm text-destructive">{errors.propertyUnitType}</p>
-                )}
+                {errors.propertyUnitType ? (
+                  <p className="text-sm text-destructive">
+                    {errors.propertyUnitType}
+                  </p>
+                ) : null}
               </div>
             </div>
 
-            <div className="grid gap-6 lg:grid-cols-2">
-              <div className="space-y-2">
+            <div className="space-y-2">
+              <Label htmlFor="property-tenure">Tenure</Label>
+              <Select
+                value={location.tenure ?? ""}
+                onValueChange={(value) => updateLocationFields({ tenure: value })}
+              >
+                <SelectTrigger
+                  id="property-tenure"
+                  data-testid="property-tenure-select"
+                >
+                  <SelectValue placeholder="Select tenure" />
+                </SelectTrigger>
+                <SelectContent>
+                  {TENURE_OPTIONS.map((option) => (
+                    <SelectItem key={option} value={option}>
+                      {option}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="grid gap-6 xl:grid-cols-2">
+              <div className="space-y-2 rounded-xl border border-border bg-background p-6 lg:p-8">
                 <h3 className="text-sm font-semibold text-foreground">Address</h3>
-                <div className="rounded-xl border border-border/60 bg-muted/40 p-4 text-sm leading-6">
-                  <p><span className="font-medium text-muted-foreground">State:</span> {location.state ?? '—'}</p>
-                  <p><span className="font-medium text-muted-foreground">City:</span> {location.city ?? '—'}</p>
-                  <p><span className="font-medium text-muted-foreground">Street:</span> {location.street ?? '—'}</p>
-                  <p><span className="font-medium text-muted-foreground">Postal code:</span> {location.postalCode ?? '—'}</p>
+                <div className="rounded-lg border border-border/60 bg-muted/40 p-4 text-sm leading-6">
+                  <p>
+                    <span className="font-medium text-muted-foreground">
+                      State:
+                    </span>{" "}
+                    {location.state ?? "—"}
+                  </p>
+                  <p>
+                    <span className="font-medium text-muted-foreground">
+                      City:
+                    </span>{" "}
+                    {location.city ?? "—"}
+                  </p>
+                  <p>
+                    <span className="font-medium text-muted-foreground">
+                      Street:
+                    </span>{" "}
+                    {location.street ?? "—"}
+                  </p>
+                  <p>
+                    <span className="font-medium text-muted-foreground">
+                      Postal code:
+                    </span>{" "}
+                    {location.postalCode ?? "—"}
+                  </p>
                 </div>
               </div>
 
-              <div className="space-y-3">
-                <h3 className="text-sm font-semibold text-foreground">Property details</h3>
+              <div className="space-y-3 rounded-xl border border-border bg-background p-6 lg:p-8">
+                <h3 className="text-sm font-semibold text-foreground">
+                  Property details
+                </h3>
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
-                    <p className="text-xs uppercase tracking-wide text-muted-foreground">Tenure</p>
-                    <p className="text-sm font-medium text-foreground">{location.tenure ?? '—'}</p>
+                    <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                      Tenure
+                    </p>
+                    <p className="text-sm font-medium text-foreground">
+                      {location.tenure ?? "—"}
+                    </p>
                   </div>
                   <div>
-                    <p className="text-xs uppercase tracking-wide text-muted-foreground">Completion year</p>
-                    <p className="text-sm font-medium text-foreground">{location.completionYear ?? '—'}</p>
+                    <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                      Completion year
+                    </p>
+                    <p className="text-sm font-medium text-foreground">
+                      {location.completionYear ?? "—"}
+                    </p>
                   </div>
                 </div>
                 <div className="flex flex-wrap gap-2" role="group" aria-label="Title type">
@@ -367,7 +405,7 @@ export function LocationStep({ errors }: StepProps) {
                     <Button
                       key={type}
                       type="button"
-                      variant={location.titleType === type ? 'default' : 'outline'}
+                      variant={location.titleType === type ? "default" : "outline"}
                       onClick={() => updateLocationFields({ titleType: type })}
                       data-testid={`title-type-${type.toLowerCase()}`}
                     >
@@ -377,26 +415,37 @@ export function LocationStep({ errors }: StepProps) {
                 </div>
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="space-y-2">
-                    <Label htmlFor="lease-years">Lease year remaining (optional)</Label>
+                    <Label htmlFor="lease-years">
+                      Lease years remaining (optional)
+                    </Label>
                     <Input
                       id="lease-years"
                       type="number"
                       min={0}
-                      placeholder="Enter number of lease year remaining"
-                      value={location.leaseYearsRemaining ?? ''}
+                      placeholder="Enter remaining years"
+                      value={location.leaseYearsRemaining ?? ""}
                       onChange={(event) =>
-                        updateLocationFields({ leaseYearsRemaining: event.target.value })
+                        updateLocationFields({
+                          leaseYearsRemaining: event.target.value
+                        })
                       }
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="bumi-lot">Is this a Bumi Lot? (optional)</Label>
+                    <Label htmlFor="bumi-lot">
+                      Is this a Bumi lot? (optional)
+                    </Label>
                     <Select
-                      value={location.bumiLot ?? 'Do not specify'}
-                      onValueChange={(value) => updateLocationFields({ bumiLot: value })}
+                      value={location.bumiLot ?? "Do not specify"}
+                      onValueChange={(value) =>
+                        updateLocationFields({ bumiLot: value })
+                      }
                     >
-                      <SelectTrigger id="bumi-lot" data-testid="bumi-lot-select">
-                        <SelectValue />
+                      <SelectTrigger
+                        id="bumi-lot"
+                        data-testid="bumi-lot-select"
+                      >
+                        <SelectValue placeholder="Select option" />
                       </SelectTrigger>
                       <SelectContent>
                         {BUMI_OPTIONS.map((option) => (
@@ -418,7 +467,7 @@ export function LocationStep({ errors }: StepProps) {
             <div className="absolute inset-0 flex items-center justify-center text-center text-sm text-muted-foreground">
               {mapFallbackText}
             </div>
-            {location.developmentName && (
+            {location.developmentName ? (
               <div className="absolute bottom-6 left-6 rounded-lg bg-background/90 p-4 shadow-lg">
                 <p className="text-sm font-semibold text-foreground">
                   {location.developmentName}
@@ -427,15 +476,18 @@ export function LocationStep({ errors }: StepProps) {
                   {location.street ?? location.address}
                 </p>
               </div>
-            )}
+            ) : null}
           </div>
           <div className="space-y-3 rounded-xl border border-border bg-background p-6">
-            <h4 className="text-sm font-semibold text-foreground">Report issue regarding property location</h4>
+            <h4 className="text-sm font-semibold text-foreground">
+              Report issue regarding property location
+            </h4>
             <p className="text-sm text-muted-foreground">
-              Submit an issue form and we will help you solve the issue as soon as possible.
+              Submit an issue form and we&apos;ll help you resolve the location
+              as quickly as possible.
             </p>
             <Button variant="outline" className="w-fit">
-              Fill up issue form
+              Fill in issue form
             </Button>
           </div>
         </aside>
