@@ -274,69 +274,74 @@ export function LocationStep({ errors }: StepProps) {
                     id="property-type"
                     data-testid="property-type-select"
                   >
-                    <SelectValue placeholder="Select property type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {PROPERTY_TYPES.map((type) => (
-                      <SelectItem key={type} value={type}>
-                        {type}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {errors.propertyType && (
-                  <p className="text-sm text-destructive">{errors.propertyType}</p>
-                )}
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="property-sub-type">Property sub type *</Label>
-                <Select
-                  value={location.propertySubType ?? ''}
-                  onValueChange={handlePropertySubTypeChange}
-                  disabled={availableSubTypes.length === 0}
-                >
-                  <SelectTrigger
-                    id="property-sub-type"
-                    data-testid="property-sub-type-select"
+                    <SelectTrigger
+                      id="property-type"
+                      data-testid="property-type-select"
+                    >
+                      <SelectValue placeholder="Select property type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {PROPERTY_TYPES.map((type) => (
+                        <SelectItem key={type} value={type}>
+                          {type}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {errors.propertyType && (
+                    <p className="text-sm text-destructive">{errors.propertyType}</p>
+                  )}
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="property-sub-type">Property sub type *</Label>
+                  <Select
+                    value={location.propertySubType ?? ''}
+                    onValueChange={handlePropertySubTypeChange}
+                    disabled={availableSubTypes.length === 0}
                   >
-                    <SelectValue placeholder="Select property subtype" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {availableSubTypes.map((subType) => (
-                      <SelectItem key={subType} value={subType}>
-                        {subType}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {errors.propertySubType && (
-                  <p className="text-sm text-destructive">{errors.propertySubType}</p>
-                )}
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="property-unit-type">Property unit type *</Label>
-                <Select
-                  value={location.propertyUnitType ?? ''}
-                  onValueChange={handlePropertyUnitTypeChange}
-                  disabled={availableUnitTypes.length === 0}
-                >
-                  <SelectTrigger
-                    id="property-unit-type"
-                    data-testid="property-unit-type-select"
+                    <SelectTrigger
+                      id="property-sub-type"
+                      data-testid="property-sub-type-select"
+                    >
+                      <SelectValue placeholder="Select property subtype" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {availableSubTypes.map((subType) => (
+                        <SelectItem key={subType} value={subType}>
+                          {subType}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {errors.propertySubType && (
+                    <p className="text-sm text-destructive">{errors.propertySubType}</p>
+                  )}
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="property-unit-type">Property unit type *</Label>
+                  <Select
+                    value={location.propertyUnitType ?? ''}
+                    onValueChange={handlePropertyUnitTypeChange}
+                    disabled={availableUnitTypes.length === 0}
                   >
-                    <SelectValue placeholder="Select unit type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {availableUnitTypes.map((unitType) => (
-                      <SelectItem key={unitType} value={unitType}>
-                        {unitType}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {errors.propertyUnitType && (
-                  <p className="text-sm text-destructive">{errors.propertyUnitType}</p>
-                )}
+                    <SelectTrigger
+                      id="property-unit-type"
+                      data-testid="property-unit-type-select"
+                    >
+                      <SelectValue placeholder="Select unit type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {availableUnitTypes.map((unitType) => (
+                        <SelectItem key={unitType} value={unitType}>
+                          {unitType}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {errors.propertyUnitType && (
+                    <p className="text-sm text-destructive">{errors.propertyUnitType}</p>
+                  )}
+                </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="property-tenure">Tenure</Label>
@@ -358,10 +363,10 @@ export function LocationStep({ errors }: StepProps) {
               </div>
             </div>
 
-            <div className="grid gap-6 lg:grid-cols-2">
-              <div className="space-y-2">
+            <div className="grid gap-6 xl:grid-cols-2">
+              <div className="space-y-2 rounded-xl border border-border bg-background p-6 lg:p-8">
                 <h3 className="text-sm font-semibold text-foreground">Address</h3>
-                <div className="rounded-xl border border-border/60 bg-muted/40 p-4 text-sm leading-6">
+                <div className="rounded-lg border border-border/60 bg-muted/40 p-4 text-sm leading-6">
                   <p><span className="font-medium text-muted-foreground">State:</span> {location.state ?? '—'}</p>
                   <p><span className="font-medium text-muted-foreground">City:</span> {location.city ?? '—'}</p>
                   <p><span className="font-medium text-muted-foreground">Street:</span> {location.street ?? '—'}</p>
@@ -369,7 +374,7 @@ export function LocationStep({ errors }: StepProps) {
                 </div>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-3 rounded-xl border border-border bg-background p-6 lg:p-8">
                 <h3 className="text-sm font-semibold text-foreground">Property details</h3>
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
