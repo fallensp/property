@@ -16,7 +16,11 @@ import {
   useListingStore,
   type LocationSelection
 } from "@/app/(listing)/listing/create/state/listing-store";
-import { mockLocations, searchLocations } from "@/lib/mock-data/locations";
+import {
+  mockLocations,
+  searchLocations,
+  type MockLocation
+} from "@/lib/mock-data/locations";
 
 type StepProps = {
   errors: Record<string, string>;
@@ -122,7 +126,7 @@ export function LocationStep({ errors }: StepProps) {
     return PROPERTY_UNIT_TYPES[location.propertySubType ?? ""] ?? [];
   }, [location.propertySubType]);
 
-  const handleSelect = (selection: LocationSelection) => {
+  const handleSelect = (selection: MockLocation) => {
     updateLocation({
       searchTerm,
       developmentName: selection.developmentName,
