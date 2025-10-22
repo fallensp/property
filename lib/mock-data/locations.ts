@@ -35,13 +35,13 @@ export const mockLocations: MockLocation[] = [
     bumiLot: 'Do not specify'
   },
   {
-    developmentName: 'Marina Business Park',
+    developmentName: 'Marina Terraces',
     address: '8 Marina View, Singapore',
     latitude: 1.2801,
     longitude: 103.8545,
-    propertyType: 'Commercial',
-    propertySubType: 'Office',
-    propertyUnitType: 'Corner',
+    propertyType: 'Terrace / Link House',
+    propertySubType: 'Townhouse',
+    propertyUnitType: 'Dual Key',
     state: 'Kuala Lumpur',
     city: 'KL City Centre',
     street: 'Jalan Ampang',
@@ -58,7 +58,7 @@ export const mockLocations: MockLocation[] = [
     longitude: 103.8238,
     propertyType: 'Apartment / Condo / Service Residence',
     propertySubType: 'Condominium',
-    propertyUnitType: 'Corner',
+    propertyUnitType: 'Corner Lot',
     state: 'Selangor',
     city: 'Petaling Jaya',
     street: 'Jalan Universiti',
@@ -69,13 +69,13 @@ export const mockLocations: MockLocation[] = [
     bumiLot: 'Do not specify'
   },
   {
-    developmentName: 'Maple Commercial Tower',
+    developmentName: 'Maple Twin Villas',
     address: '12 Robinson Road, Singapore',
     latitude: 1.2809,
     longitude: 103.8504,
-    propertyType: 'Commercial',
-    propertySubType: 'Retail',
-    propertyUnitType: 'Intermediate',
+    propertyType: 'Bungalow / Villa',
+    propertySubType: 'Twin Villas',
+    propertyUnitType: 'Duplex',
     state: 'Penang',
     city: 'George Town',
     street: 'Lebuh Pantai',
@@ -84,6 +84,23 @@ export const mockLocations: MockLocation[] = [
     completionYear: '2015',
     titleType: 'Master',
     bumiLot: 'Yes'
+  },
+  {
+    developmentName: 'Serenity Estate',
+    address: 'Lot 42 Jalan Bukit, Malaysia',
+    latitude: 4.2105,
+    longitude: 101.9758,
+    propertyType: 'Residential Land',
+    propertySubType: 'Residential Land',
+    propertyUnitType: 'Prefer not to say',
+    state: 'Johor',
+    city: 'Johor Bahru',
+    street: 'Jalan Bukit Indah',
+    postalCode: '79100',
+    tenure: 'Freehold',
+    completionYear: '2024',
+    titleType: 'Individual',
+    bumiLot: 'Do not specify'
   }
 ];
 

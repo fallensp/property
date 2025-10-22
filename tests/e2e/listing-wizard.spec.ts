@@ -37,7 +37,7 @@ test.describe('Listing wizard happy path', () => {
     await page.getByTestId('property-sub-type-select').click();
     await page.getByRole('option', { name: /service residence/i }).click();
     await page.getByTestId('property-unit-type-select').click();
-    await page.getByRole('option', { name: /corner/i }).click();
+    await page.getByRole('option', { name: /corner lot/i }).click();
     await page.getByLabel(/lease year remaining/i).fill('20');
     await page.getByTestId('title-type-strata').click();
     await page.getByTestId('bumi-lot-select').click();
