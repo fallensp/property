@@ -15,7 +15,6 @@ export type WizardStep =
   | 'location'
   | 'unitDetails'
   | 'price'
-  | 'description'
   | 'gallery'
   | 'platform'
   | 'preview';
@@ -175,7 +174,6 @@ const stepOrder: WizardStep[] = [
   'location',
   'unitDetails',
   'price',
-  'description',
   'gallery',
   'preview'
 ];
@@ -806,22 +804,6 @@ const validateByStep = (
         isValid: Object.keys(errors).length === 0,
         errors: Object.keys(errors).length === 0 ? {} : errors,
         message: firstError('Pricing captured.')
-      };
-    }
-    case 'description': {
-      if (draft.headline.trim().length < 10) {
-        errors.headline = 'Headline must be at least 10 characters.';
-      }
-      const descriptionWords = draft.description.trim()
-        ? draft.description.trim().split(/\s+/).length
-        : 0;
-      if (descriptionWords < 20) {
-        errors.description = 'Description must be at least 20 words.';
-      }
-      return {
-        isValid: Object.keys(errors).length === 0,
-        errors: Object.keys(errors).length === 0 ? {} : errors,
-        message: firstError('Narrative ready for preview.')
       };
     }
     case 'gallery': {
