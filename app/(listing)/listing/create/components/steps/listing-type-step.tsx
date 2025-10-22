@@ -94,10 +94,6 @@ export function ListingTypeStep({ errors }: StepProps) {
       updateListingType({
         propertyCategory: partial.propertyCategory ?? draft.propertyCategory,
         listingPurpose: partial.listingPurpose ?? draft.listingPurpose,
-        auctioned: partial.auctioned ?? draft.auctioned,
-        availabilityMode: partial.availabilityMode ?? draft.availabilityMode,
-        availableDate: partial.availableDate ?? draft.availableDate,
-        coAgency: partial.coAgency ?? draft.coAgency,
         referenceNumber: partial.referenceNumber ?? draft.referenceNumber
       });
     },

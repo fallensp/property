@@ -13,7 +13,7 @@ export default function ListingCreateLayout({
 }) {
   return (
     <div className="min-h-screen bg-muted/40">
-      <div className="container grid min-h-screen gap-8 py-10 lg:grid-cols-[300px_1fr]">
+      <div className="container grid min-h-screen gap-8 px-4 py-10 lg:grid-cols-[minmax(260px,320px)_minmax(0,1fr)] xl:max-w-[1400px]">
         {children}
       </div>
     </div>

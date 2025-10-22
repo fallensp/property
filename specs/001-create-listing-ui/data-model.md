@@ -6,12 +6,8 @@
 | Field | Type | Source | Validation/Notes |
 |-------|------|--------|------------------|
 | `id` | string | Generated client-side | UUID v4 used for mock persistence |
-| `propertyCategory` | `"residential" \| "commercial"` | Step 1 | Required; determines helper copy in summary |
+| `propertyCategory` | `"residential" \| "commercial" \| "industrial"` | Step 1 | Required; determines helper copy in summary |
 | `listingPurpose` | `"sale" \| "rent"` | Step 1 | Required; locked before publish |
-| `auctioned` | boolean | Step 1 | Defaults to `false`; toggles optional banner |
-| `availabilityMode` | `"immediate" \| "scheduled"` | Step 1 | Required; scheduled requires `availableDate` |
-| `availableDate` | ISO string \| null | Step 1 | Required when `availabilityMode === "scheduled"` and must be ≥ today |
-| `coAgency` | boolean | Step 1 | Defaults to `false` |
 | `referenceNumber` | string | Step 1 | Optional; max 250 chars |
 | `location` | `LocationSelection` | Step 2 | Required; derived from mock dataset |
 | `unitDetails` | `UnitDetails` | Step 3 | Required subset for bedrooms/bathrooms/builtUp |
@@ -31,6 +27,13 @@
 | `address` | string | Optional; displayed in preview |
 | `latitude` | number | Optional; used for map pin |
 | `longitude` | number | Optional; used for map pin |
+| `propertyType` | string | Required; derived from selection |
+| `propertySubType` | string | Required when available |
+| `propertyUnitType` | string | Required when available |
+| `state`, `city`, `street`, `postalCode` | string | Optional metadata rendered in summary |
+| `tenure`, `completionYear`, `titleType` | string | Optional metadata rendered in summary |
+| `leaseYearsRemaining` | string | Optional numeric input |
+| `bumiLot` | string | Optional; defaults to `Do not specify` |
 
 ### UnitDetails
 | Field | Type | Validation/Notes |

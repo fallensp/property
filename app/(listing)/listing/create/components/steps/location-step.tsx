@@ -127,9 +127,9 @@ export function LocationStep({ errors }: StepProps) {
   };
 
   return (
-    <div className="space-y-8">
-      <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_420px] lg:items-start">
-        <div className="space-y-8">
+    <div className="space-y-10">
+      <section className="grid gap-10 lg:grid-cols-[minmax(0,1.5fr)_minmax(320px,1fr)] xl:grid-cols-[minmax(0,1.75fr)_minmax(360px,1fr)] lg:items-start">
+        <div className="space-y-10">
           <div className="space-y-3">
             <Label htmlFor="location-search">Search development</Label>
             <Input
@@ -153,7 +153,7 @@ export function LocationStep({ errors }: StepProps) {
             )}
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-4">
             <p className="text-sm font-semibold text-muted-foreground">
               Suggested locations
             </p>
@@ -211,8 +211,8 @@ export function LocationStep({ errors }: StepProps) {
             </div>
           </div>
 
-          <div className="grid gap-6 rounded-xl border border-border bg-background p-6">
-            <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-8 rounded-xl border border-border bg-background p-6 lg:p-8">
+            <div className="grid gap-6 lg:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="property-type">Property type *</Label>
                 <Select
@@ -289,10 +289,10 @@ export function LocationStep({ errors }: StepProps) {
               </div>
             </div>
 
-            <div className="space-y-4">
+            <div className="grid gap-6 lg:grid-cols-2">
               <div className="space-y-2">
                 <h3 className="text-sm font-semibold text-foreground">Address</h3>
-                <div className="rounded-xl border border-border/60 bg-muted/40 p-4 text-sm">
+                <div className="rounded-xl border border-border/60 bg-muted/40 p-4 text-sm leading-6">
                   <p><span className="font-medium text-muted-foreground">State:</span> {location.state ?? '—'}</p>
                   <p><span className="font-medium text-muted-foreground">City:</span> {location.city ?? '—'}</p>
                   <p><span className="font-medium text-muted-foreground">Street:</span> {location.street ?? '—'}</p>
@@ -363,8 +363,8 @@ export function LocationStep({ errors }: StepProps) {
           </div>
         </div>
 
-        <aside className="space-y-4">
-          <div className="relative h-72 rounded-xl border border-border bg-gradient-to-br from-primary/20 via-muted to-muted/40 p-6">
+        <aside className="space-y-6">
+          <div className="relative h-80 rounded-xl border border-border bg-gradient-to-br from-primary/20 via-muted to-muted/40 p-6">
             <div className="absolute inset-0 flex items-center justify-center text-center text-sm text-muted-foreground">
               {mapFallbackText}
             </div>
@@ -379,7 +379,7 @@ export function LocationStep({ errors }: StepProps) {
               </div>
             )}
           </div>
-          <div className="space-y-3 rounded-xl border border-border bg-background p-5">
+          <div className="space-y-3 rounded-xl border border-border bg-background p-6">
             <h4 className="text-sm font-semibold text-foreground">Report issue regarding property location</h4>
             <p className="text-sm text-muted-foreground">
               Submit an issue form and we will help you solve the issue as soon as possible.

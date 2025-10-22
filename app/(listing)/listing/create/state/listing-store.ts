@@ -34,10 +34,6 @@ export type ListingDraft = {
   id: string;
   propertyCategory: 'residential' | 'commercial' | 'industrial' | null;
   listingPurpose: 'sale' | 'rent' | null;
-  auctioned: boolean;
-  availabilityMode: 'immediate' | 'scheduled';
-  availableDate: string | null;
-  coAgency: boolean;
   referenceNumber: string;
   location: LocationSelection | null;
   unitDetails: UnitDetails;
@@ -149,10 +145,6 @@ type ListingStoreState = {
   updateListingType: (payload: {
     propertyCategory: ListingDraft['propertyCategory'];
     listingPurpose: ListingDraft['listingPurpose'];
-    auctioned: boolean;
-    availabilityMode: ListingDraft['availabilityMode'];
-    availableDate: string | null;
-    coAgency: boolean;
     referenceNumber: string;
   }) => void;
   updateLocation: (payload: Partial<LocationSelection>) => void;
@@ -193,8 +185,7 @@ const createEmptyLocation = (): LocationSelection => ({
   completionYear: '',
   titleType: '',
   leaseYearsRemaining: '',
-  bumiLot: 'Do not specify',
-  direction: ''
+  bumiLot: 'Do not specify'
 });
 
 const initialStepStatus = (): Record<WizardStep, StepStatus> =>
@@ -219,10 +210,6 @@ const createInitialDraft = (): ListingDraft => ({
   id: crypto.randomUUID(),
   propertyCategory: null,
   listingPurpose: null,
-  auctioned: false,
-  availabilityMode: 'immediate',
-  availableDate: null,
-  coAgency: false,
   referenceNumber: '',
   location: null,
   unitDetails: {

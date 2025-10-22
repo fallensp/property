@@ -120,21 +120,10 @@ components:
           format: uuid
         propertyCategory:
           type: string
-          enum: [residential, commercial]
+          enum: [residential, commercial, industrial]
         listingPurpose:
           type: string
           enum: [sale, rent]
-        auctioned:
-          type: boolean
-        availabilityMode:
-          type: string
-          enum: [immediate, scheduled]
-        availableDate:
-          type: string
-          format: date
-          nullable: true
-        coAgency:
-          type: boolean
         referenceNumber:
           type: string
           maxLength: 250
@@ -182,6 +171,30 @@ components:
         longitude:
           type: number
           nullable: true
+        propertyType:
+          type: string
+        propertySubType:
+          type: string
+        propertyUnitType:
+          type: string
+        state:
+          type: string
+        city:
+          type: string
+        street:
+          type: string
+        postalCode:
+          type: string
+        tenure:
+          type: string
+        completionYear:
+          type: string
+        titleType:
+          type: string
+        leaseYearsRemaining:
+          type: string
+        bumiLot:
+          type: string
     UnitDetails:
       type: object
       required:
