@@ -8,7 +8,6 @@ import {
   useListingStore,
   type MediaAsset
 } from '@/app/(listing)/listing/create/state/listing-store';
-import { PROJECT_PHOTO_LIBRARY } from '@/lib/mock-data/gallery';
 
 import { Image as ImageIcon } from 'lucide-react';
 
@@ -26,17 +25,13 @@ export function GalleryStep({ errors }: GalleryStepProps) {
     removePhoto,
     movePhoto,
     setCoverPhoto,
-    toggleProjectPhoto,
-    selectAllProjectPhotos
   } = useListingStore((state) => ({
     media: state.draft.media,
     addPhotos: state.addPhotos,
     addSamplePhotos: state.addSamplePhotos,
     removePhoto: state.removePhoto,
     movePhoto: state.movePhoto,
-    setCoverPhoto: state.setCoverPhoto,
-    toggleProjectPhoto: state.toggleProjectPhoto,
-    selectAllProjectPhotos: state.selectAllProjectPhotos
+    setCoverPhoto: state.setCoverPhoto
   }));
 
   const orderedPhotos = useMemo(
@@ -70,10 +65,6 @@ export function GalleryStep({ errors }: GalleryStepProps) {
     input.value = '';
   };
 
-  const selectedProjectIds = useMemo(
-    () => new Set(media.projectPhotos.map((photo) => photo.referenceId).filter(Boolean)),
-    [media.projectPhotos]
-  );
 
   useEffect(() => {
     const uploadedUrls = uploadedUrlsRef.current;
@@ -145,64 +136,6 @@ export function GalleryStep({ errors }: GalleryStepProps) {
           <Button type="button" variant="secondary" size="icon" disabled>
             <ImageIcon className="h-4 w-4" aria-hidden />
           </Button>
-        </div>
-      </section>
-      <section className="space-y-4">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h3 className="text-lg font-semibold text-foreground">Project photos ({media.projectPhotos.length})</h3>
-            <p className="text-sm text-muted-foreground">
-              Highlight developer-approved imagery. These do not count towards the 5 photo minimum.
-            </p>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={() => selectAllProjectPhotos(false)}
-            >
-              Clear
-            </Button>
-            <Button
-              type="button"
-              variant="default"
-              onClick={() => selectAllProjectPhotos(true)}
-            >
-              Select all
-            </Button>
-          </div>
-        </div>
-        <div className="grid gap-4 md:grid-cols-3">
-          {PROJECT_PHOTO_LIBRARY.map((sample) => {
-            const selected = selectedProjectIds.has(sample.id);
-            return (
-              <article
-                key={sample.id}
-                className={cn(
-                  'overflow-hidden rounded-xl border border-border bg-muted/20 shadow-sm',
-                  selected && 'border-primary'
-                )}
-              >
-                <img
-                  src={sample.url}
-                  alt={sample.label}
-                  className="h-40 w-full object-cover"
-                />
-                <div className="flex items-center justify-between border-t border-border/80 bg-background px-3 py-2 text-xs text-muted-foreground">
-                  <span>{sample.label}</span>
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant={selected ? 'secondary' : 'default'}
-                    onClick={() => toggleProjectPhoto(sample.id, !selected)}
-                    data-testid={`project-photo-${sample.id}`}
-                  >
-                    {selected ? 'Remove' : 'Select'}
-                  </Button>
-                </div>
-              </article>
-            );
-          })}
         </div>
       </section>
     </div>

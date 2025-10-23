@@ -351,7 +351,7 @@ export function LocationStep({ errors }: StepProps) {
               </Select>
             </div>
 
-            <div className="grid gap-6 xl:grid-cols-2">
+            <div className="space-y-6">
               <div className="space-y-2 rounded-xl border border-border bg-background p-6 lg:p-8">
                 <h3 className="text-sm font-semibold text-foreground">Address</h3>
                 <div className="rounded-lg border border-border/60 bg-muted/40 p-4 text-sm leading-6">
@@ -386,23 +386,13 @@ export function LocationStep({ errors }: StepProps) {
                 <h3 className="text-sm font-semibold text-foreground">
                   Property details
                 </h3>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div>
-                    <p className="text-xs uppercase tracking-wide text-muted-foreground">
-                      Tenure
-                    </p>
-                    <p className="text-sm font-medium text-foreground">
-                      {location.tenure ?? "—"}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-xs uppercase tracking-wide text-muted-foreground">
-                      Completion year
-                    </p>
-                    <p className="text-sm font-medium text-foreground">
-                      {location.completionYear ?? "—"}
-                    </p>
-                  </div>
+                <div>
+                  <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                    Tenure
+                  </p>
+                  <p className="text-sm font-medium text-foreground">
+                    {location.tenure ?? "—"}
+                  </p>
                 </div>
                 <div className="flex flex-wrap gap-2" role="group" aria-label="Title type">
                   {TITLE_TYPES.map((type) => (
