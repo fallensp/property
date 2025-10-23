@@ -24,16 +24,6 @@ const furnishingOptions: Array<{
   { value: "unfurnished", label: "Unfurnished" }
 ];
 
-const featureOptions = [
-  "Balcony",
-  "Maid room",
-  "Dry kitchen",
-  "Wet kitchen",
-  "Smart lock",
-  "High ceiling",
-  "Private lift"
-];
-
 type NumberStepperProps = {
   id: string;
   label: string;
@@ -525,44 +515,6 @@ export function UnitDetailsStep({ errors }: StepProps) {
           ) : null}
         </section>
 
-        <section className="space-y-4">
-          <div className="space-y-1">
-            <h3
-              id="unit-features-label"
-              className="text-xl font-semibold text-foreground"
-            >
-              Unit features
-            </h3>
-            <p className="text-sm text-muted-foreground">
-              Optional highlights appear as badges on the listing.
-            </p>
-          </div>
-          <div
-            className="flex flex-wrap gap-2"
-            role="group"
-            aria-labelledby="unit-features-label"
-          >
-            {featureOptions.map((feature) => {
-              const selected = draft.unitDetails.features.includes(feature);
-              return (
-                <button
-                  key={feature}
-                  type="button"
-                  onClick={() => toggleFeature(feature)}
-                  className={cn(
-                    "rounded-full border px-3 py-1 text-xs font-semibold transition",
-                    selected
-                      ? "border-primary bg-primary/10 text-primary"
-                      : "border-border bg-background hover:border-primary/40 hover:bg-muted"
-                  )}
-                  aria-pressed={selected}
-                >
-                  {feature}
-                </button>
-              );
-            })}
-          </div>
-        </section>
       </div>
 
       <UnitDetailsAside />
