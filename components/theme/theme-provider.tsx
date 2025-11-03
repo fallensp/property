@@ -43,21 +43,12 @@ function getStoredTheme(): Theme | null {
   return stored === "light" || stored === "dark" ? stored : null;
 }
 
-function getSystemTheme(): Theme {
-  if (typeof window === "undefined") {
-    return "light";
-  }
-  return window.matchMedia("(prefers-color-scheme: dark)").matches
-    ? "dark"
-    : "light";
-}
-
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>("light");
+  const [theme, setThemeState] = useState<Theme>("dark");
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    const initial = getStoredTheme() ?? getSystemTheme();
+    const initial = getStoredTheme() ?? "dark";
     applyTheme(initial);
     setThemeState(initial);
     setIsReady(true);

@@ -24,7 +24,7 @@ export default function RootLayout({
       try {
         var stored = localStorage.getItem('property-theme');
         var systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        var theme = stored === 'light' || stored === 'dark' ? stored : (systemPrefersDark ? 'dark' : 'light');
+        var theme = stored === 'light' || stored === 'dark' ? stored : 'dark';
         var root = document.documentElement;
         root.classList.remove('light','dark');
         root.classList.add(theme);
@@ -36,7 +36,7 @@ export default function RootLayout({
   `;
 
   return (
-    <html lang="en" className="light" suppressHydrationWarning>
+    <html lang="en" className="dark" suppressHydrationWarning>
       <body className={inter.className}>
         <Script id="theme-initializer" strategy="beforeInteractive">
           {themeInitializer}
