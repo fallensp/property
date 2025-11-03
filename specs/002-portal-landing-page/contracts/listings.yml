@@ -1,0 +1,154 @@
+openapi: 3.1.0
+info:
+  title: Portal Listings API (frontend mock contract)
+  version: 0.1.0
+  description: >
+    Contract describing the data expected by the portal listings landing page.
+    This iteration uses mock data only, but the schema defines the fields needed
+    once a backend is introduced.
+servers:
+  - url: https://example.com
+paths:
+  /api/listings:
+    get:
+      summary: Retrieve listings for the portal landing page
+      description: Returns listings filtered by status, search, and category criteria.
+      parameters:
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [online, draft, offline, expired]
+          description: Listing bucket to return; defaults to online.
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: Free-text search across title, address, and identifiers.
+        - in: query
+          name: listingType
+          schema:
+            type: string
+          description: Listing type filter (e.g., Buy, Rent).
+        - in: query
+          name: category
+          schema:
+            type: string
+          description: Category filter as shown in the UI.
+        - in: query
+          name: propertyType
+          schema:
+            type: string
+          description: Property type filter.
+        - in: query
+          name: upgrade
+          schema:
+            type: string
+          description: Upgrade level filter.
+        - in: query
+          name: unitType
+          schema:
+            type: string
+          description: Unit type filter.
+        - in: query
+          name: sort
+          schema:
+            type: string
+            enum:
+              - listed_desc
+              - listed_asc
+              - price_desc
+              - price_asc
+          description: Sort order for the listings results.
+      responses:
+        "200":
+          description: Listings returned successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  listings:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ListingSummary'
+                  totals:
+                    type: object
+                    description: Counts used to populate status tabs.
+                    additionalProperties:
+                      type: integer
+        "400":
+          description: Provided filters were invalid.
+components:
+  schemas:
+    ListingSummary:
+      type: object
+      required:
+        - id
+        - title
+        - address
+        - price
+        - badges
+        - attributes
+        - metrics
+        - rotationInfo
+        - visibility
+        - expiryCopy
+        - thumbnailUrl
+        - status
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        address:
+          type: string
+        price:
+          type: string
+          description: Preformatted currency string.
+        badges:
+          type: array
+          items:
+            $ref: '#/components/schemas/Badge'
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attribute'
+        metrics:
+          $ref: '#/components/schemas/ListingMetrics'
+        rotationInfo:
+          type: string
+        visibility:
+          type: string
+        expiryCopy:
+          type: string
+        thumbnailUrl:
+          type: string
+          format: uri
+        status:
+          type: string
+          enum: [online, draft, offline, expired]
+    Badge:
+      type: object
+      properties:
+        label:
+          type: string
+        variant:
+          type: string
+    Attribute:
+      type: object
+      properties:
+        icon:
+          type: string
+        label:
+          type: string
+    ListingMetrics:
+      type: object
+      properties:
+        impressions:
+          type: integer
+        pageViews:
+          type: integer
+        enquiries:
+          type: integer
+*** End Patch
