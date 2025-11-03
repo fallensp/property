@@ -1,16 +1,13 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {
-  ChevronDown,
-  LogOut,
-  ShieldCheck,
-  UserRound,
-} from "lucide-react";
+import { ChevronDown, LogOut, ShieldCheck, UserRound } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { usePortalAuth } from "@/app/(portal)/portal/hooks/use-portal-auth";
 
 interface PortalHeaderProps {
@@ -78,15 +75,24 @@ export function PortalHeader({ className }: PortalHeaderProps) {
             href="/portal/listings"
             className="flex items-center gap-3 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-primary transition hover:border-primary/40 hover:bg-primary/15 sm:text-sm"
           >
-            <ShieldCheck className="h-4 w-4" aria-hidden />
-            Agent Portal
+            <Image
+              src="/images/branding/property-ai-logo.svg"
+              alt="Property AI"
+              width={140}
+              height={28}
+              className="h-6 w-auto"
+              priority
+            />
           </Link>
           <span className="hidden text-sm text-muted-foreground sm:inline-flex">
             Manage property performance with confidence
           </span>
+          <ThemeToggle className="md:hidden" />
         </div>
 
         <div className="flex items-center gap-2">
+          <ThemeToggle className="hidden md:inline-flex" />
+
           <div className="relative" ref={profileRef}>
             <Button
               type="button"

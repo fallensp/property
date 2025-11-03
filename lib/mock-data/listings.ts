@@ -59,6 +59,9 @@ export interface ListingSummary {
   hasFloorplan: boolean;
 }
 
+export const LISTING_THUMBNAIL_PLACEHOLDER =
+  "/images/placeholders/listing-card.svg";
+
 export const listings: ListingSummary[] = [
   {
     id: "IPP500273554",
@@ -81,7 +84,7 @@ export const listings: ListingSummary[] = [
     rotationInfo: "Next rotation: 5 days",
     visibility: "Visibility: 1st page",
     expiryCopy: "Upgrade expiry: 26 days",
-    thumbnailUrl: "/images/listings/glenmarie-gardens.jpg",
+    thumbnailUrl: LISTING_THUMBNAIL_PLACEHOLDER,
     status: "online",
     postedOn: "21/10/2025",
     listingType: "sale",
@@ -114,7 +117,7 @@ export const listings: ListingSummary[] = [
     rotationInfo: "Next rotation: 8 days",
     visibility: "Visibility: Low",
     expiryCopy: "Upgrade expiry: 24 days",
-    thumbnailUrl: "/images/listings/glenmarie-standard.jpg",
+    thumbnailUrl: LISTING_THUMBNAIL_PLACEHOLDER,
     status: "online",
     postedOn: "20/10/2025",
     listingType: "sale",
@@ -147,7 +150,7 @@ export const listings: ListingSummary[] = [
     rotationInfo: "Next rotation: 12 days",
     visibility: "Visibility: Low",
     expiryCopy: "Upgrade expiry: 27 days",
-    thumbnailUrl: "/images/listings/usj-5.jpg",
+    thumbnailUrl: LISTING_THUMBNAIL_PLACEHOLDER,
     status: "online",
     postedOn: "20/10/2025",
     listingType: "sale",
@@ -180,7 +183,7 @@ export const listings: ListingSummary[] = [
     rotationInfo: "Draft last edited: 3 days ago",
     visibility: "Visibility: Preview",
     expiryCopy: "Complete details to publish",
-    thumbnailUrl: "/images/listings/damansara-loft.jpg",
+    thumbnailUrl: LISTING_THUMBNAIL_PLACEHOLDER,
     status: "draft",
     postedOn: "—",
     listingType: "sale",
@@ -213,7 +216,7 @@ export const listings: ListingSummary[] = [
     rotationInfo: "Draft saved: 19/10/2025",
     visibility: "Visibility: Preview",
     expiryCopy: "Add media to publish",
-    thumbnailUrl: "/images/listings/bangsar-suites.jpg",
+    thumbnailUrl: LISTING_THUMBNAIL_PLACEHOLDER,
     status: "draft",
     postedOn: "—",
     listingType: "sale",
@@ -244,7 +247,7 @@ export const listings: ListingSummary[] = [
     rotationInfo: "Last online: 18/10/2025",
     visibility: "Visibility: Offline",
     expiryCopy: "Reason: Payment pending",
-    thumbnailUrl: "/images/listings/cheras-hub.jpg",
+    thumbnailUrl: LISTING_THUMBNAIL_PLACEHOLDER,
     status: "offline",
     postedOn: "18/10/2025",
     listingType: "rent",
@@ -277,7 +280,7 @@ export const listings: ListingSummary[] = [
     rotationInfo: "Posted: 19/10/2025",
     visibility: "Visibility: Low",
     expiryCopy: "Performance: 75% below avg.",
-    thumbnailUrl: "/images/listings/eco-city-residence.jpg",
+    thumbnailUrl: LISTING_THUMBNAIL_PLACEHOLDER,
     status: "expired",
     postedOn: "19/10/2025",
     listingType: "sale",
@@ -310,7 +313,7 @@ export const listings: ListingSummary[] = [
     rotationInfo: "Expired: 15/10/2025",
     visibility: "Visibility: Expired",
     expiryCopy: "Renew to reactivate listing",
-    thumbnailUrl: "/images/listings/mont-kiara-duplex.jpg",
+    thumbnailUrl: LISTING_THUMBNAIL_PLACEHOLDER,
     status: "expired",
     postedOn: "15/08/2025",
     listingType: "sale",

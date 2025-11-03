@@ -2,9 +2,14 @@
 
 import Link from 'next/link';
 
+import { ThemeToggle } from '@/components/theme/theme-toggle';
+
 export default function HomePage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-muted/40 p-8 text-center">
+    <main className="relative flex min-h-screen flex-col items-center justify-center bg-muted/40 p-8 text-center">
+      <div className="absolute right-4 top-4 sm:right-6 sm:top-6">
+        <ThemeToggle />
+      </div>
       <section className="max-w-2xl space-y-6 rounded-xl border bg-background p-10 shadow-md">
         <h1 className="text-3xl font-semibold tracking-tight">
           Property Listing Creation

@@ -131,7 +131,7 @@ export function ListingsFilters({
         </div>
       </div>
 
-      <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+      <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
         {renderSelect(
           "Listing type",
           filters.listingType,

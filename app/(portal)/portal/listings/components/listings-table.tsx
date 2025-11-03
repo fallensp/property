@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+import Link from "next/link";
 import { ExternalLink, Gauge, Ruler, Thermometer, Users } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -65,17 +67,25 @@ export function ListingsTable({
           : "grid-cols-1",
       )}
     >
-      {listings.map((listing) => (
+      {listings.map((listing, index) => (
         <article
           key={listing.id}
           aria-label={listing.title}
           className="flex flex-col gap-4 rounded-lg border border-border bg-card p-4 shadow-sm transition hover:border-primary/50 hover:shadow-md lg:flex-row"
         >
           <div className="relative h-44 overflow-hidden rounded-md bg-muted lg:h-auto lg:w-48">
-            <span className="absolute inset-0 bg-gradient-to-br from-muted to-muted-foreground/20" />
-            <div className="relative flex h-full items-end justify-start p-3 text-xs font-medium text-muted-foreground">
-              Image placeholder
-            </div>
+            <Image
+              src={listing.thumbnailUrl}
+              alt={`${listing.title} preview`}
+              width={320}
+              height={240}
+              className="h-full w-full object-cover"
+              priority={index < 3}
+            />
+            <span className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/60 to-transparent" />
+            <span className="absolute left-3 bottom-3 inline-flex items-center rounded-full bg-black/60 px-2 py-1 text-xs font-medium text-foreground opacity-90 backdrop-blur">
+              Preview image
+            </span>
           </div>
           <div className="flex flex-1 flex-col gap-3">
             <div className="flex flex-wrap items-center gap-2">
@@ -94,12 +104,12 @@ export function ListingsTable({
               ))}
             </div>
             <div className="space-y-1">
-              <a
-                href="#"
+              <Link
+                href={`/portal/listings/${listing.id}`}
                 className="text-lg font-semibold leading-tight text-foreground hover:text-primary"
               >
                 {listing.title}
-              </a>
+              </Link>
               <p className="text-sm text-muted-foreground">{listing.address}</p>
             </div>
             <div className="flex flex-wrap items-center gap-2 text-sm font-medium text-foreground">
@@ -146,8 +156,8 @@ export function ListingsTable({
               </div>
             </div>
             <div className="flex flex-wrap gap-2">
-              <Button size="sm" variant="outline">
-                View
+              <Button size="sm" variant="outline" asChild>
+                <Link href={`/portal/listings/${listing.id}`}>View</Link>
               </Button>
               <Button size="sm" variant="outline">
                 Edit
