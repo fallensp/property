@@ -1,21 +1,19 @@
 "use client";
 
 import { type ReactNode } from "react";
-import { MoreHorizontal, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 interface ListingsHeaderProps {
   onCreateListing: () => void;
-  onMoreActions?: () => void;
   children?: ReactNode;
   className?: string;
 }
 
 export function ListingsHeader({
   onCreateListing,
-  onMoreActions,
   children,
   className,
 }: ListingsHeaderProps) {
@@ -31,17 +29,6 @@ export function ListingsHeader({
           </p>
         </div>
         <div className="flex flex-shrink-0 items-center gap-2 self-start">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onMoreActions}
-            className="hidden sm:inline-flex"
-            data-testid="more-actions"
-            aria-label="Open bulk listing actions"
-          >
-            More actions
-            <MoreHorizontal className="ml-2 h-4 w-4" />
-          </Button>
           <Button
             type="button"
             onClick={onCreateListing}

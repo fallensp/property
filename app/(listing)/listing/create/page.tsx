@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { ProgressSidebar } from "@/app/(listing)/listing/create/components/progress-sidebar";
 import { StepCard } from "@/app/(listing)/listing/create/components/step-card";
 import { ListingTypeStep } from "@/app/(listing)/listing/create/components/steps/listing-type-step";
@@ -13,6 +14,7 @@ import { ValidationBanner } from "@/app/(listing)/listing/create/components/vali
 import { ValidationModeToggle } from "@/app/(listing)/listing/create/components/validation-mode-toggle";
 import { type WizardStep } from "@/app/(listing)/listing/create/state/listing-store";
 import { useListingWizard } from "@/app/(listing)/listing/create/hooks/use-listing-wizard";
+import { usePortalAuth } from "@/app/(portal)/portal/hooks/use-portal-auth";
 
 type StepComponent = (props: { errors: Record<string, string> }) => JSX.Element;
 
@@ -27,6 +29,9 @@ const stepComponentMap: Record<WizardStep, StepComponent> = {
 };
 
 export default function ListingCreatePage() {
+  const router = useRouter();
+  const user = usePortalAuth((state) => state.user);
+
   const {
     currentStep,
     currentIndex,
@@ -48,6 +53,22 @@ export default function ListingCreatePage() {
     return stepComponentMap[currentStep] ?? (() => <></>);
   }, [currentStep]);
   const strictEnabled = !validationBypassEnabled;
+
+  useEffect(() => {
+    if (!user) {
+      router.replace("/portal");
+    }
+  }, [router, user]);
+
+  if (!user) {
+    return (
+      <main className="flex min-h-[50vh] items-center justify-center">
+        <p className="text-sm text-muted-foreground">
+          Redirecting to login…
+        </p>
+      </main>
+    );
+  }
 
   return (
     <>

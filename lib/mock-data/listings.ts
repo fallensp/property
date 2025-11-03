@@ -33,17 +33,26 @@ export interface ListingSummary {
   thumbnailUrl: string;
   status: ListingStatus;
   postedOn: string;
-  listingType: "buy" | "rent";
-  category: "premium" | "standard";
+  listingType: "sale" | "rent";
+  category: "residential" | "commercial" | "industrial";
   propertyType:
-    | "bungalow"
-    | "condo"
-    | "loft"
-    | "retail"
-    | "penthouse"
-    | "duplex"
-    | "other";
-  unitType?: "corner" | "high-floor" | "intermediate";
+    | "Bungalow / Villa"
+    | "Apartment / Condo / Service Residence"
+    | "Semi-Detached House"
+    | "Terrace / Link House"
+    | "Residential Land";
+  unitType?:
+    | "Intermediate"
+    | "Corner Lot"
+    | "End Lot"
+    | "Duplex"
+    | "Triplex"
+    | "Penthouse"
+    | "Studio"
+    | "Soho"
+    | "Loft"
+    | "Dual Key"
+    | "Prefer not to say";
   upgradeTiers: string[];
   hasVideo: boolean;
   hasVirtualTour: boolean;
@@ -58,9 +67,9 @@ export const listings: ListingSummary[] = [
     price: "RM 6,000,000",
     priceValue: 6000000,
     badges: [
-      { label: "Premium", variant: "premium" },
-      { label: "Buy", variant: "info" },
-      { label: "Bungalow", variant: "standard" },
+      { label: "Residential", variant: "premium" },
+      { label: "Sale", variant: "info" },
+      { label: "Bungalow / Villa", variant: "standard" },
     ],
     attributes: [
       { icon: "bed", label: "6+1" },
@@ -75,10 +84,10 @@ export const listings: ListingSummary[] = [
     thumbnailUrl: "/images/listings/glenmarie-gardens.jpg",
     status: "online",
     postedOn: "21/10/2025",
-    listingType: "buy",
-    category: "premium",
-    propertyType: "bungalow",
-    unitType: "corner",
+    listingType: "sale",
+    category: "residential",
+    propertyType: "Bungalow / Villa",
+    unitType: "Corner Lot",
     upgradeTiers: ["premium"],
     hasVideo: true,
     hasVirtualTour: true,
@@ -91,9 +100,9 @@ export const listings: ListingSummary[] = [
     price: "RM 6,000,000",
     priceValue: 6000000,
     badges: [
-      { label: "Standard", variant: "standard" },
-      { label: "Buy", variant: "info" },
-      { label: "Bungalow", variant: "standard" },
+      { label: "Residential", variant: "standard" },
+      { label: "Sale", variant: "info" },
+      { label: "Bungalow / Villa", variant: "standard" },
     ],
     attributes: [
       { icon: "bed", label: "6+1" },
@@ -108,10 +117,10 @@ export const listings: ListingSummary[] = [
     thumbnailUrl: "/images/listings/glenmarie-standard.jpg",
     status: "online",
     postedOn: "20/10/2025",
-    listingType: "buy",
-    category: "standard",
-    propertyType: "bungalow",
-    unitType: "corner",
+    listingType: "sale",
+    category: "residential",
+    propertyType: "Bungalow / Villa",
+    unitType: "Corner Lot",
     upgradeTiers: ["standard"],
     hasVideo: false,
     hasVirtualTour: true,
@@ -124,9 +133,9 @@ export const listings: ListingSummary[] = [
     price: "RM 2,150,000",
     priceValue: 2150000,
     badges: [
-      { label: "Standard", variant: "standard" },
-      { label: "Buy", variant: "info" },
-      { label: "Bungalow", variant: "standard" },
+      { label: "Residential", variant: "standard" },
+      { label: "Sale", variant: "info" },
+      { label: "Terrace / Link House", variant: "standard" },
     ],
     attributes: [
       { icon: "bed", label: "4" },
@@ -141,10 +150,10 @@ export const listings: ListingSummary[] = [
     thumbnailUrl: "/images/listings/usj-5.jpg",
     status: "online",
     postedOn: "20/10/2025",
-    listingType: "buy",
-    category: "standard",
-    propertyType: "bungalow",
-    unitType: "intermediate",
+    listingType: "sale",
+    category: "residential",
+    propertyType: "Terrace / Link House",
+    unitType: "Intermediate",
     upgradeTiers: ["standard"],
     hasVideo: false,
     hasVirtualTour: false,
@@ -158,7 +167,7 @@ export const listings: ListingSummary[] = [
     priceValue: 950000,
     badges: [
       { label: "Draft", variant: "info" },
-      { label: "Buy", variant: "info" },
+      { label: "Sale", variant: "info" },
       { label: "Loft", variant: "standard" },
     ],
     attributes: [
@@ -174,10 +183,10 @@ export const listings: ListingSummary[] = [
     thumbnailUrl: "/images/listings/damansara-loft.jpg",
     status: "draft",
     postedOn: "—",
-    listingType: "buy",
-    category: "standard",
-    propertyType: "loft",
-    unitType: "high-floor",
+    listingType: "sale",
+    category: "residential",
+    propertyType: "Apartment / Condo / Service Residence",
+    unitType: "Loft",
     upgradeTiers: [],
     hasVideo: false,
     hasVirtualTour: false,
@@ -191,7 +200,7 @@ export const listings: ListingSummary[] = [
     priceValue: 3200000,
     badges: [
       { label: "Draft", variant: "info" },
-      { label: "Buy", variant: "info" },
+      { label: "Sale", variant: "info" },
       { label: "Penthouse", variant: "standard" },
     ],
     attributes: [
@@ -207,10 +216,10 @@ export const listings: ListingSummary[] = [
     thumbnailUrl: "/images/listings/bangsar-suites.jpg",
     status: "draft",
     postedOn: "—",
-    listingType: "buy",
-    category: "standard",
-    propertyType: "penthouse",
-    unitType: "high-floor",
+    listingType: "sale",
+    category: "residential",
+    propertyType: "Apartment / Condo / Service Residence",
+    unitType: "Penthouse",
     upgradeTiers: [],
     hasVideo: true,
     hasVirtualTour: false,
@@ -223,9 +232,9 @@ export const listings: ListingSummary[] = [
     price: "RM 12,800",
     priceValue: 12800,
     badges: [
-      { label: "Standard", variant: "standard" },
+      { label: "Commercial", variant: "standard" },
       { label: "Rent", variant: "info" },
-      { label: "Retail", variant: "standard" },
+      { label: "Service Residence", variant: "standard" },
     ],
     attributes: [
       { icon: "size", label: "Built-up: 1,500 sq.ft." },
@@ -239,9 +248,9 @@ export const listings: ListingSummary[] = [
     status: "offline",
     postedOn: "18/10/2025",
     listingType: "rent",
-    category: "standard",
-    propertyType: "retail",
-    unitType: "high-floor",
+    category: "commercial",
+    propertyType: "Apartment / Condo / Service Residence",
+    unitType: "Prefer not to say",
     upgradeTiers: [],
     hasVideo: false,
     hasVirtualTour: false,
@@ -254,9 +263,9 @@ export const listings: ListingSummary[] = [
     price: "RM 2,850,000",
     priceValue: 2850000,
     badges: [
-      { label: "Standard", variant: "standard" },
-      { label: "Buy", variant: "info" },
-      { label: "Condo", variant: "standard" },
+      { label: "Residential", variant: "standard" },
+      { label: "Sale", variant: "info" },
+      { label: "Apartment / Condo / Service Residence", variant: "standard" },
     ],
     attributes: [
       { icon: "bed", label: "3" },
@@ -271,10 +280,10 @@ export const listings: ListingSummary[] = [
     thumbnailUrl: "/images/listings/eco-city-residence.jpg",
     status: "expired",
     postedOn: "19/10/2025",
-    listingType: "buy",
-    category: "standard",
-    propertyType: "condo",
-    unitType: "high-floor",
+    listingType: "sale",
+    category: "residential",
+    propertyType: "Apartment / Condo / Service Residence",
+    unitType: "Penthouse",
     upgradeTiers: ["featured"],
     hasVideo: false,
     hasVirtualTour: false,
@@ -288,8 +297,8 @@ export const listings: ListingSummary[] = [
     priceValue: 6800000,
     badges: [
       { label: "Expired", variant: "warning" },
-      { label: "Buy", variant: "info" },
-      { label: "Duplex", variant: "standard" },
+      { label: "Sale", variant: "info" },
+      { label: "Semi-Detached House", variant: "standard" },
     ],
     attributes: [
       { icon: "bed", label: "5" },
@@ -304,10 +313,10 @@ export const listings: ListingSummary[] = [
     thumbnailUrl: "/images/listings/mont-kiara-duplex.jpg",
     status: "expired",
     postedOn: "15/08/2025",
-    listingType: "buy",
-    category: "standard",
-    propertyType: "duplex",
-    unitType: "corner",
+    listingType: "sale",
+    category: "residential",
+    propertyType: "Semi-Detached House",
+    unitType: "Dual Key",
     upgradeTiers: [],
     hasVideo: true,
     hasVirtualTour: true,

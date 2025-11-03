@@ -20,7 +20,6 @@ import {
   PROPERTY_TYPE_OPTIONS,
   SORT_OPTIONS,
   UNIT_TYPE_OPTIONS,
-  UPGRADE_OPTIONS,
 } from "../constants";
 import type {
   FilterState,
@@ -150,12 +149,6 @@ export function ListingsFilters({
           filters.propertyType,
           PROPERTY_TYPE_OPTIONS,
           "propertyType",
-        )}
-        {renderSelect(
-          "Upgrade",
-          filters.upgrade,
-          UPGRADE_OPTIONS,
-          "upgrade",
         )}
         {renderSelect(
           "Unit type",

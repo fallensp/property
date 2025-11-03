@@ -9,9 +9,12 @@ import { ListingsFilters } from "./components/listings-filters";
 import { ListingsTabs } from "./components/listings-tabs";
 import { ListingsTable } from "./components/listings-table";
 import { useListingsFilter } from "./hooks/use-listings-filter";
+import { usePortalAuth } from "../hooks/use-portal-auth";
+import { PortalHeader } from "@/components/portal/portal-header";
 
 export default function PortalListingsPage() {
   const router = useRouter();
+  const user = usePortalAuth((state) => state.user);
   const {
     status,
     setStatus,
@@ -26,18 +29,38 @@ export default function PortalListingsPage() {
   } = useListingsFilter();
 
   useEffect(() => {
+    if (!user) {
+      router.replace("/portal");
+    }
+  }, [router, user]);
+
+  useEffect(() => {
+    if (!user) {
+      return;
+    }
     router.prefetch("/listing/create");
-  }, [router]);
+  }, [router, user]);
 
   const handleCreateListing = () => {
     router.push("/listing/create");
   };
 
+  const shouldRenderContent = Boolean(user);
+
   return (
-    <main className="flex flex-col gap-6 p-6">
-      <ListingsHeader
-        onCreateListing={handleCreateListing}
-      >
+    <div className="min-h-screen bg-muted/40">
+      <PortalHeader />
+      {!shouldRenderContent ? (
+        <main className="flex min-h-[60vh] items-center justify-center px-6 py-10">
+          <p className="text-sm text-muted-foreground">
+            Redirecting to login…
+          </p>
+        </main>
+      ) : (
+        <main className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 pb-12 pt-6 sm:px-6 lg:px-8">
+        <ListingsHeader
+          onCreateListing={handleCreateListing}
+        >
         <ListingsFilters
           filters={filters}
           viewMode={viewMode}
@@ -74,6 +97,8 @@ export default function PortalListingsPage() {
         onResetFilters={resetFilters}
         createListingHref="/listing/create"
       />
-    </main>
+      </main>
+      )}
+    </div>
   );
 }

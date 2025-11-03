@@ -42,38 +42,43 @@ export const SEARCH_PLACEHOLDER =
   "Search by township, postcode, address, ID or listing reference number";
 
 export const LISTING_TYPE_OPTIONS: FilterOption[] = [
-  { label: "All listing types", value: "all" },
-  { label: "Buy", value: "buy" },
+  { label: "All listing purposes", value: "all" },
+  { label: "Sale", value: "sale" },
   { label: "Rent", value: "rent" },
 ];
 
 export const CATEGORY_OPTIONS: FilterOption[] = [
-  { label: "All categories", value: "all" },
-  { label: "Premium", value: "premium" },
-  { label: "Standard", value: "standard" },
+  { label: "All property categories", value: "all" },
+  { label: "Residential", value: "residential" },
+  { label: "Commercial", value: "commercial" },
+  { label: "Industrial", value: "industrial" },
 ];
 
 export const PROPERTY_TYPE_OPTIONS: FilterOption[] = [
   { label: "All property types", value: "all" },
-  { label: "Bungalow", value: "bungalow" },
-  { label: "Condo", value: "condo" },
-  { label: "Loft", value: "loft" },
-  { label: "Retail", value: "retail" },
-  { label: "Penthouse", value: "penthouse" },
-];
-
-export const UPGRADE_OPTIONS: FilterOption[] = [
-  { label: "Any upgrade", value: "all" },
-  { label: "Premium", value: "premium" },
-  { label: "Standard", value: "standard" },
-  { label: "Featured", value: "featured" },
+  { label: "Bungalow / Villa", value: "Bungalow / Villa" },
+  {
+    label: "Apartment / Condo / Service Residence",
+    value: "Apartment / Condo / Service Residence",
+  },
+  { label: "Semi-Detached House", value: "Semi-Detached House" },
+  { label: "Terrace / Link House", value: "Terrace / Link House" },
+  { label: "Residential Land", value: "Residential Land" },
 ];
 
 export const UNIT_TYPE_OPTIONS: FilterOption[] = [
   { label: "All unit types", value: "all" },
-  { label: "Corner lot", value: "corner" },
-  { label: "High floor", value: "high-floor" },
-  { label: "Intermediate", value: "intermediate" },
+  { label: "Intermediate", value: "Intermediate" },
+  { label: "Corner Lot", value: "Corner Lot" },
+  { label: "End Lot", value: "End Lot" },
+  { label: "Duplex", value: "Duplex" },
+  { label: "Triplex", value: "Triplex" },
+  { label: "Penthouse", value: "Penthouse" },
+  { label: "Studio", value: "Studio" },
+  { label: "Soho", value: "Soho" },
+  { label: "Loft", value: "Loft" },
+  { label: "Dual Key", value: "Dual Key" },
+  { label: "Prefer not to say", value: "Prefer not to say" },
 ];
 
 export const MORE_FILTERS: FilterOption[] = [

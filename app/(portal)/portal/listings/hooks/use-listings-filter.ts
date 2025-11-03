@@ -28,7 +28,6 @@ export interface FilterState {
   listingType: string;
   category: string;
   propertyType: string;
-  upgrade: string;
   unitType: string;
   sort: SortValue;
   more: MoreFilterState;
@@ -39,7 +38,6 @@ export const DEFAULT_FILTERS: FilterState = {
   listingType: "all",
   category: "all",
   propertyType: "all",
-  upgrade: "all",
   unitType: "all",
   sort: "listed_desc",
   more: {
@@ -133,13 +131,6 @@ export function filterListing(
   }
 
   if (!matchesFilter(listing.propertyType, filters.propertyType)) {
-    return false;
-  }
-
-  if (
-    filters.upgrade !== "all" &&
-    !listing.upgradeTiers.includes(filters.upgrade)
-  ) {
     return false;
   }
 
