@@ -36,6 +36,10 @@ export function PreviewStep(_: StepProps) {
 
   const summaryItems = [
     {
+      label: "Property name",
+      value: draft.propertyName ? draft.propertyName : "—"
+    },
+    {
       label: "Property category",
       value: draft.propertyCategory ? draft.propertyCategory : "—"
     },

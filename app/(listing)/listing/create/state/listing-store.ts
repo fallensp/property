@@ -31,6 +31,7 @@ export type StepValidationResult = {
 
 export type ListingDraft = {
   id: string;
+  propertyName: string;
   propertyCategory: 'residential' | 'commercial' | 'industrial' | null;
   listingPurpose: 'sale' | 'rent' | null;
   auctioned: boolean;
@@ -149,6 +150,7 @@ type ListingStoreState = {
     payload: Partial<
       Pick<
         ListingDraft,
+        | 'propertyName'
         | 'propertyCategory'
         | 'listingPurpose'
         | 'referenceNumber'
@@ -219,6 +221,7 @@ const emptyMediaCollection = (): MediaCollection => ({
 
 const createInitialDraft = (): ListingDraft => ({
   id: crypto.randomUUID(),
+  propertyName: '',
   propertyCategory: null,
   listingPurpose: null,
   auctioned: false,
@@ -711,6 +714,9 @@ const validateByStep = (
 
   switch (step) {
     case 'listingType': {
+      if (!draft.propertyName || draft.propertyName.trim().length === 0) {
+        errors.propertyName = 'Enter a property name to help identify the listing.';
+      }
       if (!draft.propertyCategory) {
         errors.propertyCategory = 'Select a property category to proceed.';
       }

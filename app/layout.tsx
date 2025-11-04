@@ -14,6 +14,8 @@ export const metadata: Metadata = {
     'Create property listings with a guided, multi-step experience aligned with PRD requirements.'
 };
 
+const themeToggleEnabled = process.env.NEXT_PUBLIC_ENABLE_THEME_TOGGLE === 'true';
+
 export default function RootLayout({
   children
 }: Readonly<{
@@ -41,7 +43,7 @@ export default function RootLayout({
         <Script id="theme-initializer" strategy="beforeInteractive">
           {themeInitializer}
         </Script>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider toggleEnabled={themeToggleEnabled}>{children}</ThemeProvider>
       </body>
     </html>
   );

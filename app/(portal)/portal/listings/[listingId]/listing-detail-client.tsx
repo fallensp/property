@@ -178,7 +178,7 @@ export function ListingDetailClient({
                   </div>
                   <div className="space-y-2">
                     <h1 className="text-3xl font-semibold tracking-tight text-foreground">
-                      {summaryDetail.summary.title}
+                      {summaryDetail.propertyName}
                     </h1>
                     <p className="max-w-2xl text-sm text-muted-foreground">
                       {summaryDetail.headline}

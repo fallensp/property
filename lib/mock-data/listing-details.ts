@@ -11,6 +11,7 @@ type FurnishingLevel = "Fully furnished" | "Partially furnished" | "Unfurnished"
 export interface ListingDetail {
   id: string;
   summary: ListingSummary;
+  propertyName: string;
   referenceNumber: string;
   headline: string;
   description: string;
@@ -48,6 +49,7 @@ export interface ListingDetail {
 
 const detailContent: Record<string, Omit<ListingDetail, "id" | "summary">> = {
   IPP500273554: {
+    propertyName: "Glenmarie Gardens",
     referenceNumber: "IPP500273554",
     headline: "Resort-style living with landscaped gardens",
     description:
@@ -92,6 +94,7 @@ const detailContent: Record<string, Omit<ListingDetail, "id" | "summary">> = {
     ],
   },
   IPP500270959: {
+    propertyName: "Glenmarie Gardens",
     referenceNumber: "IPP500270959",
     headline: "Classic family residence with mature gardens",
     description:
@@ -136,6 +139,7 @@ const detailContent: Record<string, Omit<ListingDetail, "id" | "summary">> = {
     ],
   },
   IPP500268477: {
+    propertyName: "USJ 5 Residence",
     referenceNumber: "IPP500268477",
     headline: "Extended terrace with indoor-outdoor living flow",
     description:
@@ -179,6 +183,7 @@ const detailContent: Record<string, Omit<ListingDetail, "id" | "summary">> = {
     ],
   },
   IPP500220001: {
+    propertyName: "Damansara Uptown Loft",
     referenceNumber: "IPP500220001",
     headline: "Loft sanctuary with skyline panoramas",
     description:
@@ -222,6 +227,7 @@ const detailContent: Record<string, Omit<ListingDetail, "id" | "summary">> = {
     ],
   },
   IPP500210777: {
+    propertyName: "Bangsar South Suites",
     referenceNumber: "IPP500210777",
     headline: "Sky penthouse with private entertainment deck",
     description:
@@ -264,6 +270,7 @@ const detailContent: Record<string, Omit<ListingDetail, "id" | "summary">> = {
     ],
   },
   IPP500188888: {
+    propertyName: "Cheras Business Hub Retail",
     referenceNumber: "IPP500188888",
     headline: "Flexible retail suite in thriving commercial hub",
     description:
@@ -305,6 +312,7 @@ const detailContent: Record<string, Omit<ListingDetail, "id" | "summary">> = {
     ],
   },
   IPP500166654: {
+    propertyName: "Eco City Residence",
     referenceNumber: "IPP500166654",
     headline: "Corner residence redesigned with Scandinavian aesthetics",
     description:
@@ -348,6 +356,7 @@ const detailContent: Record<string, Omit<ListingDetail, "id" | "summary">> = {
     ],
   },
   IPP500122233: {
+    propertyName: "Mont Kiara Duplex",
     referenceNumber: "IPP500122233",
     headline: "Duplex retreat with private rooftop lounge",
     description:
@@ -399,6 +408,7 @@ export const listingDetails: ListingDetail[] = listings.map((listing) => {
     return {
       id: listing.id,
       summary: listing,
+      propertyName: listing.title,
       referenceNumber: listing.id,
       headline: listing.title,
       description: "Detailed description coming soon.",

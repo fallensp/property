@@ -15,6 +15,7 @@ type Theme = "light" | "dark";
 interface ThemeContextValue {
   theme: Theme;
   isReady: boolean;
+  toggleEnabled: boolean;
   setTheme: (theme: Theme) => void;
   toggleTheme: () => void;
 }
@@ -24,6 +25,7 @@ const STORAGE_KEY = "property-theme";
 const ThemeContext = createContext<ThemeContextValue>({
   theme: "light",
   isReady: false,
+  toggleEnabled: false,
   setTheme: () => {},
   toggleTheme: () => {},
 });
@@ -43,7 +45,12 @@ function getStoredTheme(): Theme | null {
   return stored === "light" || stored === "dark" ? stored : null;
 }
 
-export function ThemeProvider({ children }: { children: ReactNode }) {
+interface ThemeProviderProps {
+  children: ReactNode;
+  toggleEnabled?: boolean;
+}
+
+export function ThemeProvider({ children, toggleEnabled = false }: ThemeProviderProps) {
   const [theme, setThemeState] = useState<Theme>("dark");
   const [isReady, setIsReady] = useState(false);
 
@@ -66,17 +73,18 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     setTheme(theme === "light" ? "dark" : "light");
   }, [setTheme, theme]);
 
-  const value = useMemo<ThemeContextValue>(
+  const contextValue = useMemo<ThemeContextValue>(
     () => ({
       theme,
       isReady,
+      toggleEnabled,
       setTheme,
-      toggleTheme,
+      toggleTheme: toggleEnabled ? toggleTheme : () => {},
     }),
-    [theme, isReady, setTheme, toggleTheme],
+    [theme, isReady, toggleEnabled, setTheme, toggleTheme],
   );
 
-  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
+  return <ThemeContext.Provider value={contextValue}>{children}</ThemeContext.Provider>;
 }
 
 export function useTheme() {

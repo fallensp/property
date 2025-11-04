@@ -105,11 +105,12 @@ const TENURE_OPTIONS = ["Freehold", "Leasehold"];
 const BUMI_OPTIONS = ["Do not specify", "Yes", "No"];
 
 export function LocationStep({ errors }: StepProps) {
-  const { draft, updateLocation, updateLocationFields } = useListingStore(
+  const { draft, updateLocation, updateLocationFields, updateListingType } = useListingStore(
     (state) => ({
       draft: state.draft,
       updateLocation: state.updateLocation,
-      updateLocationFields: state.updateLocationFields
+      updateLocationFields: state.updateLocationFields,
+      updateListingType: state.updateListingType
     })
   );
 
@@ -145,6 +146,9 @@ export function LocationStep({ errors }: StepProps) {
       titleType: selection.titleType,
       bumiLot: selection.bumiLot ?? "Do not specify"
     });
+    if (!draft.propertyName) {
+      updateListingType({ propertyName: selection.developmentName });
+    }
   };
 
   const mapFallbackText = location.developmentName

@@ -71,15 +71,12 @@ export function PortalHeader({ className }: PortalHeaderProps) {
     >
       <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-3">
-          <Link
-            href="/portal/listings"
-            className="flex items-center gap-3 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-primary transition hover:border-primary/40 hover:bg-primary/15 sm:text-sm"
-          >
+          <Link href="/portal/listings" className="flex items-center gap-3">
             <Image
               src="/images/branding/property-ai-logo.svg"
               alt="Property AI"
-              width={140}
-              height={28}
+              width={150}
+              height={32}
               className="h-6 w-auto"
               priority
             />

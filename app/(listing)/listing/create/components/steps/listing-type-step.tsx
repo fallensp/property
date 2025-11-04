@@ -92,6 +92,7 @@ export function ListingTypeStep({ errors }: StepProps) {
   const update = useCallback(
     (partial: Partial<ListingDraft>) => {
       updateListingType({
+        propertyName: partial.propertyName ?? draft.propertyName,
         propertyCategory: partial.propertyCategory ?? draft.propertyCategory,
         listingPurpose: partial.listingPurpose ?? draft.listingPurpose,
         referenceNumber: partial.referenceNumber ?? draft.referenceNumber
@@ -128,6 +129,30 @@ export function ListingTypeStep({ errors }: StepProps) {
             {errors.propertyCategory}
           </p>
         )}
+      </section>
+
+      <section className="space-y-4">
+        <h3 className="text-lg font-semibold">Property name</h3>
+        <p className="text-sm text-muted-foreground">
+          Provide the display name for this listing. Buyers will see this prominently on the marketplace card.
+        </p>
+        <div className="space-y-2">
+          <Label htmlFor="property-name">Property name *</Label>
+          <Input
+            id="property-name"
+            maxLength={120}
+            placeholder="E.g. Glenmarie Gardens Residence"
+            value={draft.propertyName}
+            onChange={(event) => update({ propertyName: event.target.value })}
+            aria-invalid={Boolean(errors.propertyName)}
+            aria-describedby={errors.propertyName ? 'property-name-error' : undefined}
+          />
+          {errors.propertyName && (
+            <p id="property-name-error" className="text-sm text-destructive">
+              {errors.propertyName}
+            </p>
+          )}
+        </div>
       </section>
 
       <section className="space-y-4">
