@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { AlertCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -11,10 +11,17 @@ import { ListingsTable } from "./components/listings-table";
 import { useListingsFilter } from "./hooks/use-listings-filter";
 import { usePortalAuth } from "../hooks/use-portal-auth";
 import { PortalHeader } from "@/components/portal/portal-header";
+import { fetchListings } from "@/lib/api/listings";
+import { toListingSummary } from "@/lib/api/transformers";
+import type { ListingSummary } from "@/lib/mock-data/listings";
 
 export default function PortalListingsPage() {
   const router = useRouter();
   const user = usePortalAuth((state) => state.user);
+  const token = usePortalAuth((state) => state.token);
+  const [listings, setListings] = useState<ListingSummary[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const {
     status,
     setStatus,
@@ -26,7 +33,7 @@ export default function PortalListingsPage() {
     setViewMode,
     filteredListings,
     statusCounts,
-  } = useListingsFilter();
+  } = useListingsFilter(listings);
 
   useEffect(() => {
     if (!user) {
@@ -47,6 +54,36 @@ export default function PortalListingsPage() {
 
   const shouldRenderContent = Boolean(user);
 
+  useEffect(() => {
+    if (!user || !token) {
+      return;
+    }
+    let active = true;
+    setIsLoading(true);
+    setLoadError(null);
+    fetchListings(token, { per_page: 100 })
+      .then((response) => {
+        if (!active) return;
+        setListings(response.data.map((listing) => toListingSummary(listing)));
+      })
+      .catch((error) => {
+        if (!active) return;
+        const message =
+          error instanceof Error
+            ? error.message
+            : "Unable to load listings. Please try again.";
+        setLoadError(message);
+      })
+      .finally(() => {
+        if (active) {
+          setIsLoading(false);
+        }
+      });
+    return () => {
+      active = false;
+    };
+  }, [token, user]);
+
   return (
     <div className="min-h-screen bg-muted/40">
       <PortalHeader />
@@ -54,6 +91,17 @@ export default function PortalListingsPage() {
         <main className="flex min-h-[60vh] items-center justify-center px-6 py-10">
           <p className="text-sm text-muted-foreground">
             Redirecting to login…
+          </p>
+        </main>
+      ) : isLoading ? (
+        <main className="flex min-h-[60vh] items-center justify-center px-6 py-10">
+          <p className="text-sm text-muted-foreground">Loading your listings…</p>
+        </main>
+      ) : loadError ? (
+        <main className="flex min-h-[60vh] flex-col items-center justify-center gap-4 px-6 py-10 text-center">
+          <p className="text-sm text-destructive">{loadError}</p>
+          <p className="text-xs text-muted-foreground">
+            Refresh the page or try again later.
           </p>
         </main>
       ) : (

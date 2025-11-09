@@ -20,6 +20,7 @@ export function PortalHeader({ className }: PortalHeaderProps) {
   const router = useRouter();
 
   const [profileOpen, setProfileOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const profileRef = useRef<HTMLDivElement | null>(null);
 
   const displayName = useMemo(() => {
@@ -59,10 +60,15 @@ export function PortalHeader({ className }: PortalHeaderProps) {
     return null;
   }
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
     setProfileOpen(false);
-    router.replace("/portal");
+    setIsLoggingOut(true);
+    try {
+      await logout();
+      router.replace("/portal");
+    } finally {
+      setIsLoggingOut(false);
+    }
   };
 
   return (
@@ -156,6 +162,7 @@ export function PortalHeader({ className }: PortalHeaderProps) {
                     variant="ghost"
                     className="w-full justify-start gap-2 text-destructive hover:bg-destructive/10"
                     onClick={handleLogout}
+                    disabled={isLoggingOut}
                   >
                     <LogOut className="h-4 w-4" aria-hidden />
                     Sign out

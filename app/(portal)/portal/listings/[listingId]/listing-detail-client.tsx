@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -17,17 +17,25 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { PortalHeader } from "@/components/portal/portal-header";
 import { usePortalAuth } from "@/app/(portal)/portal/hooks/use-portal-auth";
+import { fetchListing } from "@/lib/api/listings";
+import { toListingDetail } from "@/lib/api/transformers";
 import { type ListingDetail } from "@/lib/mock-data/listing-details";
 
-function DetailPlaceholder({ onBack }: { onBack: () => void }) {
+function DetailPlaceholder({
+  onBack,
+  message,
+}: {
+  onBack: () => void;
+  message?: string;
+}) {
   const router = useRouter();
   return (
     <div className="flex min-h-[60vh] flex-col items-center justify-center gap-6 text-center">
       <div className="space-y-2">
         <h2 className="text-2xl font-semibold text-foreground">Listing not found</h2>
         <p className="max-w-md text-sm text-muted-foreground">
-          We couldn&apos;t locate the listing you&apos;re looking for. It may have been archived or
-          removed. Return to the listings dashboard to continue exploring.
+          {message ??
+            "We couldn&apos;t locate the listing you&apos;re looking for. It may have been archived or removed. Return to the listings dashboard to continue exploring."}
         </p>
       </div>
       <div className="flex flex-wrap justify-center gap-2">
@@ -112,15 +120,13 @@ function priceTypeLabel(priceType: ListingDetail["pricing"]["priceType"]) {
   }
 }
 
-export function ListingDetailClient({
-  detail,
-  listingId,
-}: {
-  detail: ListingDetail | undefined;
-  listingId: string;
-}) {
+export function ListingDetailClient({ listingId }: { listingId: string }) {
   const router = useRouter();
   const user = usePortalAuth((state) => state.user);
+  const token = usePortalAuth((state) => state.token);
+  const [detail, setDetail] = useState<ListingDetail | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) {
@@ -128,7 +134,37 @@ export function ListingDetailClient({
     }
   }, [router, user]);
 
-  const summaryDetail = useMemo(() => detail, [detail]);
+  useEffect(() => {
+    if (!user || !token) {
+      return;
+    }
+    let active = true;
+    setIsLoading(true);
+    setLoadError(null);
+    fetchListing(token, listingId)
+      .then((response) => {
+        if (!active) return;
+        setDetail(toListingDetail(response));
+      })
+      .catch((error) => {
+        if (!active) return;
+        const message =
+          error instanceof Error
+            ? error.message
+            : "Unable to load listing details.";
+        setLoadError(message);
+      })
+      .finally(() => {
+        if (active) {
+          setIsLoading(false);
+        }
+      });
+    return () => {
+      active = false;
+    };
+  }, [listingId, token, user]);
+
+  const summaryDetail = useMemo(() => detail ?? undefined, [detail]);
 
   if (!user) {
     return (
@@ -158,7 +194,18 @@ export function ListingDetailClient({
           </div>
         </div>
 
-        {!summaryDetail ? (
+        {isLoading ? (
+          <div className="flex min-h-[40vh] items-center justify-center rounded-2xl border border-border bg-card">
+            <p className="text-sm text-muted-foreground">
+              Loading listing details…
+            </p>
+          </div>
+        ) : loadError ? (
+          <DetailPlaceholder
+            onBack={() => router.push("/portal/listings")}
+            message={loadError}
+          />
+        ) : !summaryDetail ? (
           <DetailPlaceholder onBack={() => router.push("/portal/listings")} />
         ) : (
           <>

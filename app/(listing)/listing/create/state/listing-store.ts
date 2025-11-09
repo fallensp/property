@@ -52,11 +52,14 @@ export type ListingDraft = {
 export type LocationSelection = {
   searchTerm: string;
   developmentName: string;
+  propertyTypeId?: number | null;
   address?: string | null;
   latitude?: number | null;
   longitude?: number | null;
   propertyType?: string;
+  propertySubTypeId?: number | null;
   propertySubType?: string;
+  propertyUnitTypeId?: number | null;
   propertyUnitType?: string;
   state?: string;
   city?: string;
@@ -186,9 +189,12 @@ const defaultValidationBypassEnabled =
 const createEmptyLocation = (): LocationSelection => ({
   searchTerm: '',
   developmentName: '',
+  propertyTypeId: null,
   address: '',
   propertyType: '',
+  propertySubTypeId: null,
   propertySubType: '',
+  propertyUnitTypeId: null,
   propertyUnitType: '',
   state: '',
   city: '',

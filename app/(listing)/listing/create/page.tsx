@@ -14,6 +14,7 @@ import { ValidationBanner } from "@/app/(listing)/listing/create/components/vali
 import { ValidationModeToggle } from "@/app/(listing)/listing/create/components/validation-mode-toggle";
 import { type WizardStep } from "@/app/(listing)/listing/create/state/listing-store";
 import { useListingWizard } from "@/app/(listing)/listing/create/hooks/use-listing-wizard";
+import { useListingSubmission } from "@/app/(listing)/listing/create/hooks/use-listing-submission";
 import { usePortalAuth } from "@/app/(portal)/portal/hooks/use-portal-auth";
 
 type StepComponent = (props: { errors: Record<string, string> }) => JSX.Element;
@@ -48,6 +49,12 @@ export default function ListingCreatePage() {
     setValidationBypass,
     metadata
   } = useListingWizard();
+  const {
+    submitDraft,
+    status: submissionStatus,
+    error: submissionError,
+  } = useListingSubmission();
+  const isSaving = submissionStatus === "saving";
 
   const StepComponent = useMemo<StepComponent>(() => {
     return stepComponentMap[currentStep] ?? (() => <></>);
@@ -59,6 +66,19 @@ export default function ListingCreatePage() {
       router.replace("/portal");
     }
   }, [router, user]);
+
+  const handleFinish = async () => {
+    const canProceed = handleNext();
+    if (!canProceed) {
+      return;
+    }
+    try {
+      await submitDraft();
+      router.push("/portal/listings");
+    } catch {
+      // Errors handled inside the submission hook.
+    }
+  };
 
   if (!user) {
     return (
@@ -80,17 +100,28 @@ export default function ListingCreatePage() {
         <StepCard
           title={metadata.title}
           description={metadata.description}
-          onNext={isLastStep ? undefined : handleNext}
+          onNext={isLastStep ? handleFinish : handleNext}
           onPrevious={isFirstStep ? undefined : handlePrevious}
           statusMessage={
-            bannerMessage ? (
-              <ValidationBanner message={bannerMessage} variant={bannerVariant} />
-            ) : null
+            <>
+              {bannerMessage ? (
+                <ValidationBanner message={bannerMessage} variant={bannerVariant} />
+              ) : null}
+              {isLastStep && submissionError ? (
+                <p className="text-sm text-destructive">{submissionError}</p>
+              ) : null}
+            </>
           }
           isFirstStep={isFirstStep}
           isLastStep={isLastStep}
-          nextLabel={isLastStep ? "Finish" : "Next"}
-          isNextDisabled={isNextDisabled}
+          nextLabel={
+            isLastStep
+              ? isSaving
+                ? "Saving listing..."
+                : "Save listing"
+              : undefined
+          }
+          isNextDisabled={isLastStep ? isSaving : isNextDisabled}
           auxiliaryActions={
             <ValidationModeToggle
               strictEnabled={strictEnabled}

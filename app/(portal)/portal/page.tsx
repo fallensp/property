@@ -22,10 +22,12 @@ export default function PortalLoginPage() {
   const router = useRouter();
   const user = usePortalAuth((state) => state.user);
   const login = usePortalAuth((state) => state.login);
+  const authStatus = usePortalAuth((state) => state.status);
+  const authError = usePortalAuth((state) => state.error);
+  const clearError = usePortalAuth((state) => state.clearError);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -33,9 +35,26 @@ export default function PortalLoginPage() {
     }
   }, [router, user]);
 
+  useEffect(() => {
+    if (error) {
+      setError(null);
+    }
+    if (authError) {
+      clearError();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [email, password]);
+
+  useEffect(() => {
+    if (authError) {
+      setError(authError);
+    }
+  }, [authError]);
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError(null);
+    clearError();
 
     const trimmedEmail = email.trim();
     const trimmedPassword = password.trim();
@@ -45,14 +64,14 @@ export default function PortalLoginPage() {
       return;
     }
 
-    setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
-    login({
-      email: trimmedEmail,
-      name: trimmedEmail.split("@")[0],
-    });
-    router.push("/portal/listings");
+    try {
+      await login(trimmedEmail, trimmedPassword);
+      router.push("/portal/listings");
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Unable to sign in.";
+      setError(message);
+    }
   };
 
   if (user) {
@@ -120,8 +139,12 @@ export default function PortalLoginPage() {
             ) : null}
           </CardContent>
           <CardFooter className="flex flex-col gap-3">
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
-              {isSubmitting ? (
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={authStatus === "loading"}
+            >
+              {authStatus === "loading" ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden />
                   Signing you in…
@@ -131,7 +154,8 @@ export default function PortalLoginPage() {
               )}
             </Button>
             <p className="text-center text-xs text-muted-foreground">
-              Preview credentials: any email plus password will sign you in.
+              Preview credentials: <span className="font-semibold">agent@example.com</span> /
+              <span className="font-semibold">password</span>
             </p>
           </CardFooter>
         </form>

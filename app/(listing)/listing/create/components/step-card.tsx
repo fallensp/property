@@ -14,7 +14,7 @@ type StepCardProps = {
   title: string;
   description: string;
   children: ReactNode;
-  onNext?: () => void;
+  onNext?: () => void | boolean | Promise<void | boolean>;
   onPrevious?: () => void;
   nextLabel?: string;
   isNextDisabled?: boolean;
@@ -31,7 +31,7 @@ export function StepCard({
   children,
   onNext,
   onPrevious,
-  nextLabel = 'Next',
+  nextLabel,
   isNextDisabled = false,
   className,
   statusMessage,
@@ -39,6 +39,28 @@ export function StepCard({
   isFirstStep,
   isLastStep
 }: StepCardProps) {
+  const handleNextClick = () => {
+    if (!onNext) {
+      return;
+    }
+    try {
+      const result = onNext();
+      if (
+        result &&
+        typeof (result as Promise<unknown>).then === "function" &&
+        typeof (result as Promise<unknown>).catch === "function"
+      ) {
+        (result as Promise<unknown>).catch(() => {});
+      }
+    } catch {
+      // Errors are handled by the caller; avoid crashing the component.
+    }
+  };
+
+  const nextDisabled = isNextDisabled || !onNext;
+  const fallbackLabel = isLastStep ? 'Finish' : 'Next';
+  const buttonLabel = nextLabel ?? fallbackLabel;
+
   return (
     <Card className={cn('flex h-full flex-col', className)}>
       <CardHeader className="pb-6">
@@ -62,11 +84,11 @@ export function StepCard({
             </Button>
           )}
           <Button
-            onClick={onNext}
-            disabled={isNextDisabled || !onNext}
+            onClick={handleNextClick}
+            disabled={nextDisabled}
             data-testid="wizard-next"
           >
-            {isLastStep ? 'Finish' : nextLabel}
+            {buttonLabel}
           </Button>
         </div>
         <div className="flex flex-col gap-2 text-sm text-muted-foreground sm:items-end">

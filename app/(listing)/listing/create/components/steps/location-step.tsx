@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,89 +16,13 @@ import {
   useListingStore,
   type LocationSelection
 } from "@/app/(listing)/listing/create/state/listing-store";
-import {
-  mockLocations,
-  searchLocations,
-  type MockLocation
-} from "@/lib/mock-data/locations";
+import { fetchLocationSuggestions } from "@/lib/api/locations";
+import { usePropertyMetadataStore } from "@/lib/stores/property-metadata-store";
+import type { LocationSuggestion } from "@/lib/api/types";
 
 type StepProps = {
   errors: Record<string, string>;
 };
-
-const PROPERTY_TYPES_CONFIG = [
-  {
-    type: "Bungalow / Villa",
-    subTypes: [
-      "Bungalow",
-      "Zero-Lot Bungalow",
-      "Link Bungalow",
-      "Bungalow Land",
-      "Twin Villas"
-    ]
-  },
-  {
-    type: "Apartment / Condo / Service Residence",
-    subTypes: ["Flat", "Apartment", "Service Residence", "Condominium"]
-  },
-  {
-    type: "Semi-Detached House",
-    subTypes: ["Semi-Detached House", "Cluster House"]
-  },
-  {
-    type: "Terrace / Link House",
-    subTypes: [
-      "Terraced House",
-      "1-storey Terraced House",
-      "1.5-storey Terraced House",
-      "2-storey Terrace House",
-      "2.5-storey Terraced House",
-      "3-storey Terraced House",
-      "3.5-storey Terraced House",
-      "4-storey Terraced House",
-      "4.5-storey Terraced House",
-      "Townhouse"
-    ]
-  },
-  {
-    type: "Residential Land",
-    subTypes: ["Residential Land"]
-  }
-] as const;
-
-const PROPERTY_TYPES = PROPERTY_TYPES_CONFIG.map((config) => config.type);
-
-const PROPERTY_SUB_TYPES = PROPERTY_TYPES_CONFIG.reduce<Record<string, string[]>>(
-  (acc, config) => {
-    acc[config.type] = [...config.subTypes];
-    return acc;
-  },
-  {}
-);
-
-const PROPERTY_UNIT_TYPE_BASE = [
-  "Intermediate",
-  "Corner Lot",
-  "End Lot",
-  "Duplex",
-  "Triplex",
-  "Penthouse",
-  "Studio",
-  "Soho",
-  "Loft",
-  "Dual Key",
-  "Prefer not to say"
-];
-
-const PROPERTY_UNIT_TYPES = PROPERTY_TYPES_CONFIG.reduce<Record<string, string[]>>(
-  (acc, config) => {
-    config.subTypes.forEach((subType) => {
-      acc[subType] = [...PROPERTY_UNIT_TYPE_BASE];
-    });
-    return acc;
-  },
-  {}
-);
 
 const TITLE_TYPES = ["Individual", "Strata", "Master"];
 const TENURE_OPTIONS = ["Freehold", "Leasehold"];
@@ -117,70 +41,149 @@ export function LocationStep({ errors }: StepProps) {
   const location = draft.location ?? ({} as Partial<LocationSelection>);
 
   const [searchTerm, setSearchTerm] = useState(location.searchTerm ?? "");
-  const [suggestions, setSuggestions] = useState(mockLocations);
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
+  const [suggestions, setSuggestions] = useState<LocationSuggestion[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchError, setSearchError] = useState<string | null>(null);
 
-  const availableSubTypes = useMemo(() => {
-    return PROPERTY_SUB_TYPES[location.propertyType ?? ""] ?? [];
-  }, [location.propertyType]);
+  const propertyTypes = usePropertyMetadataStore((state) => state.propertyTypes);
+  const metadataStatus = usePropertyMetadataStore((state) => state.status);
+  const fetchMetadata = usePropertyMetadataStore((state) => state.fetchMetadata);
 
-  const availableUnitTypes = useMemo(() => {
-    return PROPERTY_UNIT_TYPES[location.propertySubType ?? ""] ?? [];
-  }, [location.propertySubType]);
+  useEffect(() => {
+    fetchMetadata();
+  }, [fetchMetadata]);
 
-  const handleSelect = (selection: MockLocation) => {
+  useEffect(() => {
+    const timeout = window.setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 350);
+
+    return () => {
+      window.clearTimeout(timeout);
+    };
+  }, [searchTerm]);
+
+  useEffect(() => {
+    let active = true;
+    setIsSearching(true);
+    setSearchError(null);
+    fetchLocationSuggestions(debouncedSearchTerm || undefined)
+      .then((data) => {
+        if (!active) return;
+        setSuggestions(data);
+      })
+      .catch((error) => {
+        if (!active) return;
+        setSearchError(
+          error instanceof Error
+            ? error.message
+            : "Unable to fetch location suggestions.",
+        );
+      })
+      .finally(() => {
+        if (active) {
+          setIsSearching(false);
+        }
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [debouncedSearchTerm]);
+
+  const selectedPropertyType = useMemo(
+    () => propertyTypes.find((type) => type.id === location.propertyTypeId),
+    [location.propertyTypeId, propertyTypes],
+  );
+
+  const availableSubTypes = useMemo(
+    () => selectedPropertyType?.sub_types ?? [],
+    [selectedPropertyType],
+  );
+
+  const selectedSubType = useMemo(
+    () =>
+      availableSubTypes.find(
+        (subType) => subType.id === location.propertySubTypeId,
+      ) ?? availableSubTypes[0],
+    [availableSubTypes, location.propertySubTypeId],
+  );
+
+  const availableUnitTypes = useMemo(
+    () => selectedSubType?.unit_types ?? [],
+    [selectedSubType],
+  );
+
+  const handleSelect = (selection: LocationSuggestion) => {
+    const developmentName = selection.development_name ?? "";
+    const nextSearchTerm = developmentName || searchTerm;
     updateLocation({
-      searchTerm,
-      developmentName: selection.developmentName,
-      address: selection.address,
+      searchTerm: nextSearchTerm,
+      developmentName,
+      address: selection.address ?? "",
       latitude: selection.latitude,
       longitude: selection.longitude,
-      propertyType: selection.propertyType,
-      propertySubType: selection.propertySubType,
-      propertyUnitType: selection.propertyUnitType,
-      state: selection.state,
-      city: selection.city,
-      street: selection.street,
-      postalCode: selection.postalCode,
-      tenure: selection.tenure,
-      completionYear: selection.completionYear,
-      titleType: selection.titleType,
-      bumiLot: selection.bumiLot ?? "Do not specify"
+      state: selection.state ?? "",
+      city: selection.city ?? "",
+      street: selection.address ?? "",
+      postalCode: "",
+      tenure: location.tenure,
+      completionYear: location.completionYear,
+      titleType: location.titleType,
+      bumiLot: location.bumiLot ?? "Do not specify"
     });
+    setSearchTerm(nextSearchTerm);
     if (!draft.propertyName) {
-      updateListingType({ propertyName: selection.developmentName });
+      updateListingType({ propertyName: nextSearchTerm || draft.propertyName });
     }
   };
 
   const mapFallbackText = location.developmentName
     ? `Map preview for ${location.developmentName}`
-    : "Select a location to preview the map";
+    : isSearching
+      ? "Searching for matching developments..."
+      : "Select a location to preview the map";
 
   const handlePropertyTypeChange = (value: string) => {
-    const subTypes = PROPERTY_SUB_TYPES[value] ?? [];
-    const firstSubType = subTypes[0] ?? "";
-    const unitTypes = PROPERTY_UNIT_TYPES[firstSubType] ?? [];
+    const typeId = Number(value);
+    const matched = propertyTypes.find((type) => type.id === typeId);
+    const subTypes = matched?.sub_types ?? [];
+    const firstSubType = subTypes[0];
+    const unitTypes = firstSubType?.unit_types ?? [];
     updateLocationFields({
-      propertyType: value,
-      propertySubType: firstSubType,
-      propertyUnitType: unitTypes[0] ?? ""
+      propertyTypeId: matched?.id,
+      propertyType: matched?.name ?? "",
+      propertySubTypeId: firstSubType?.id,
+      propertySubType: firstSubType?.name ?? "",
+      propertyUnitTypeId: unitTypes[0]?.id,
+      propertyUnitType: unitTypes[0]?.name ?? ""
     });
   };
 
   const handlePropertySubTypeChange = (value: string) => {
-    const unitTypes = PROPERTY_UNIT_TYPES[value] ?? [];
+    const subTypeId = Number(value);
+    const subType = availableSubTypes.find((item) => item.id === subTypeId);
+    const unitTypes = subType?.unit_types ?? [];
     updateLocationFields({
-      propertySubType: value,
-      propertyUnitType: unitTypes[0] ?? ""
+      propertySubTypeId: subType?.id,
+      propertySubType: subType?.name ?? "",
+      propertyUnitTypeId: unitTypes[0]?.id,
+      propertyUnitType: unitTypes[0]?.name ?? ""
     });
   };
 
   const handlePropertyUnitTypeChange = (value: string) => {
-    updateLocationFields({ propertyUnitType: value });
+    const unitTypeId = Number(value);
+    const unitType = availableUnitTypes.find((item) => item.id === unitTypeId);
+    updateLocationFields({
+      propertyUnitTypeId: unitType?.id,
+      propertyUnitType: unitType?.name ?? "",
+    });
   };
 
   const handleSearchChange = (value: string) => {
     setSearchTerm(value);
-    setSuggestions(searchLocations(value));
   };
 
   return (
@@ -217,14 +220,18 @@ export function LocationStep({ errors }: StepProps) {
               Suggested locations
             </p>
             <div className="grid gap-3 sm:grid-cols-2">
-              {suggestions.map((suggestion) => {
+              {suggestions.map((suggestion, index) => {
+                const developmentName = suggestion.development_name ?? "Unknown development";
                 const selected =
-                  location.developmentName === suggestion.developmentName;
+                  location.developmentName === developmentName;
+                const key =
+                  suggestion.google_place_id ??
+                  `${developmentName}-${suggestion.address}-${index}`;
                 return (
                   <button
-                    key={suggestion.developmentName}
+                    key={key}
                     type="button"
-                    data-testid={`location-option-${suggestion.developmentName}`}
+                    data-testid={`location-option-${developmentName}`}
                     onClick={() => handleSelect(suggestion)}
                     className={cn(
                       "rounded-xl border p-4 text-left transition",
@@ -235,29 +242,39 @@ export function LocationStep({ errors }: StepProps) {
                     aria-pressed={selected}
                   >
                     <p className="text-base font-semibold text-foreground">
-                      {suggestion.developmentName}
+                      {developmentName}
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      {suggestion.address}
+                      {suggestion.address ?? suggestion.city ?? suggestion.state ?? "Address unavailable"}
                     </p>
                   </button>
                 );
               })}
-              {suggestions.length === 0 ? (
+              {isSearching ? (
+                <div className="rounded-xl border border-dashed border-border bg-muted/40 p-6 text-sm text-muted-foreground">
+                  Fetching locations…
+                </div>
+              ) : suggestions.length === 0 ? (
                 <div className="rounded-xl border border-dashed border-border bg-muted/40 p-6 text-sm text-muted-foreground">
                   No results found. Try a different search term.
                 </div>
               ) : null}
             </div>
+            {searchError ? (
+              <p className="text-sm text-destructive">{searchError}</p>
+            ) : null}
           </div>
 
           <div className="grid gap-8 rounded-xl border border-border bg-background p-6 lg:p-8">
-            <div className="grid gap-6 lg:grid-cols-3">
-              <div className="space-y-2">
+            <div className="grid gap-6 lg:grid-cols-2">
+              <div className="space-y-2 lg:col-span-2">
                 <Label htmlFor="property-type">Property type *</Label>
                 <Select
-                  value={location.propertyType ?? ""}
+                  value={
+                    location.propertyTypeId ? String(location.propertyTypeId) : ""
+                  }
                   onValueChange={handlePropertyTypeChange}
+                  disabled={metadataStatus === "loading"}
                 >
                   <SelectTrigger
                     id="property-type"
@@ -266,9 +283,9 @@ export function LocationStep({ errors }: StepProps) {
                     <SelectValue placeholder="Select property type" />
                   </SelectTrigger>
                   <SelectContent>
-                    {PROPERTY_TYPES.map((type) => (
-                      <SelectItem key={type} value={type}>
-                        {type}
+                    {propertyTypes.map((type) => (
+                      <SelectItem key={type.id} value={String(type.id)}>
+                        {type.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -280,7 +297,11 @@ export function LocationStep({ errors }: StepProps) {
               <div className="space-y-2">
                 <Label htmlFor="property-sub-type">Property sub type *</Label>
                 <Select
-                  value={location.propertySubType ?? ""}
+                  value={
+                    location.propertySubTypeId
+                      ? String(location.propertySubTypeId)
+                      : ""
+                  }
                   onValueChange={handlePropertySubTypeChange}
                   disabled={availableSubTypes.length === 0}
                 >
@@ -292,8 +313,8 @@ export function LocationStep({ errors }: StepProps) {
                   </SelectTrigger>
                   <SelectContent>
                     {availableSubTypes.map((subType) => (
-                      <SelectItem key={subType} value={subType}>
-                        {subType}
+                      <SelectItem key={subType.id} value={String(subType.id)}>
+                        {subType.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -307,7 +328,11 @@ export function LocationStep({ errors }: StepProps) {
               <div className="space-y-2">
                 <Label htmlFor="property-unit-type">Property unit type *</Label>
                 <Select
-                  value={location.propertyUnitType ?? ""}
+                  value={
+                    location.propertyUnitTypeId
+                      ? String(location.propertyUnitTypeId)
+                      : ""
+                  }
                   onValueChange={handlePropertyUnitTypeChange}
                   disabled={availableUnitTypes.length === 0}
                 >
@@ -319,8 +344,8 @@ export function LocationStep({ errors }: StepProps) {
                   </SelectTrigger>
                   <SelectContent>
                     {availableUnitTypes.map((unitType) => (
-                      <SelectItem key={unitType} value={unitType}>
-                        {unitType}
+                      <SelectItem key={unitType.id} value={String(unitType.id)}>
+                        {unitType.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -332,6 +357,12 @@ export function LocationStep({ errors }: StepProps) {
                 ) : null}
               </div>
             </div>
+
+            {metadataStatus === "error" ? (
+              <p className="text-sm text-destructive">
+                Unable to load property metadata. Please refresh this page.
+              </p>
+            ) : null}
 
             <div className="space-y-2">
               <Label htmlFor="property-tenure">Tenure</Label>
@@ -475,18 +506,6 @@ export function LocationStep({ errors }: StepProps) {
                 </p>
               </div>
             ) : null}
-          </div>
-          <div className="space-y-3 rounded-xl border border-border bg-background p-6">
-            <h4 className="text-sm font-semibold text-foreground">
-              Report issue regarding property location
-            </h4>
-            <p className="text-sm text-muted-foreground">
-              Submit an issue form and we&apos;ll help you resolve the location
-              as quickly as possible.
-            </p>
-            <Button variant="outline" className="w-fit">
-              Fill in issue form
-            </Button>
           </div>
         </aside>
       </section>

@@ -19,7 +19,7 @@ type UseListingWizardResult = {
   bannerVariant: 'error' | 'neutral' | 'success';
   isNextDisabled: boolean;
   validationBypassEnabled: boolean;
-  handleNext: () => void;
+  handleNext: () => boolean;
   handlePrevious: () => void;
   setValidationBypass: (enabled: boolean) => void;
   metadata: { title: string; description: string };
@@ -94,19 +94,20 @@ export function useListingWizard(): UseListingWizardResult {
       setStepStatus(currentStep, 'complete');
       clearStepErrors(currentStep);
       nextStep();
-      return;
+      return true;
     }
 
     const result = validateStep(currentStep);
     if (!result.isValid) {
       setStepErrors(currentStep, result.errors);
       setStepStatus(currentStep, 'blocked');
-      return;
+      return false;
     }
 
     setStepStatus(currentStep, 'complete');
     clearStepErrors(currentStep);
     nextStep();
+    return true;
   };
 
   const handlePrevious = () => {
