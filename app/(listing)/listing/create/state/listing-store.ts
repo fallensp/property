@@ -720,9 +720,6 @@ const validateByStep = (
 
   switch (step) {
     case 'listingType': {
-      if (!draft.propertyName || draft.propertyName.trim().length === 0) {
-        errors.propertyName = 'Enter a property name to help identify the listing.';
-      }
       if (!draft.propertyCategory) {
         errors.propertyCategory = 'Select a property category to proceed.';
       }
