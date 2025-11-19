@@ -307,39 +307,41 @@ export default function LandingPage() {
 
             <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
               {featuredListings.map((listing) => (
-                <Card key={listing.id} className="overflow-hidden border-border/80 bg-card">
-                  <div className="relative h-48 w-full overflow-hidden">
-                    <Image
-                      src={listing.thumbnailUrl}
-                      alt={listing.title}
-                      fill
-                      className="object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-                  </div>
-                  <CardContent className="space-y-3 p-5">
-                    <div className="space-y-1">
-                      <h3 className="text-base font-semibold text-foreground">
-                        {listing.title}
-                      </h3>
-                      <p className="text-xs text-muted-foreground">
-                        {listing.address}
+                <Link key={listing.id} href={`/property/${listing.id}`}>
+                  <Card className="overflow-hidden border-border/80 bg-card transition-all hover:border-primary/50 hover:shadow-md">
+                    <div className="relative h-48 w-full overflow-hidden">
+                      <Image
+                        src={listing.thumbnailUrl}
+                        alt={listing.title}
+                        fill
+                        className="object-cover transition-transform duration-300 hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                    </div>
+                    <CardContent className="space-y-3 p-5">
+                      <div className="space-y-1">
+                        <h3 className="text-base font-semibold text-foreground">
+                          {listing.title}
+                        </h3>
+                        <p className="text-xs text-muted-foreground">
+                          {listing.address}
+                        </p>
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        <MapPin className="mr-1 inline h-3 w-3 text-primary" aria-hidden />
+                        {listing.visibility}
                       </p>
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      <MapPin className="mr-1 inline h-3 w-3 text-primary" aria-hidden />
-                      {listing.visibility}
-                    </p>
-                    <p className="text-lg font-semibold text-primary">{listing.price}</p>
-                    <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
-                      {listing.attributes.slice(0, 3).map((attr) => (
-                        <Badge key={`${listing.id}-${attr.label}`} variant="secondary" className="rounded-full px-3 py-1 text-xs">
-                          {attr.label}
-                        </Badge>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
+                      <p className="text-lg font-semibold text-primary">{listing.price}</p>
+                      <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
+                        {listing.attributes.slice(0, 3).map((attr) => (
+                          <Badge key={`${listing.id}-${attr.label}`} variant="secondary" className="rounded-full px-3 py-1 text-xs">
+                            {attr.label}
+                          </Badge>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Link>
               ))}
             </div>
 

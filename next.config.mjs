@@ -28,7 +28,6 @@ const hasBasePath = normalizedBasePath.length > 0;
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  output: 'export',
   basePath: hasBasePath ? normalizedBasePath : undefined,
   assetPrefix: hasBasePath ? normalizedBasePath : undefined,
   trailingSlash: true,

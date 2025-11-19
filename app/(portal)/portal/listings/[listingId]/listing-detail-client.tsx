@@ -20,6 +20,7 @@ import { usePortalAuth } from "@/app/(portal)/portal/hooks/use-portal-auth";
 import { fetchListing } from "@/lib/api/listings";
 import { toListingDetail } from "@/lib/api/transformers";
 import { type ListingDetail } from "@/lib/mock-data/listing-details";
+import { useListingStore } from "@/app/(listing)/listing/create/state/listing-store";
 
 function DetailPlaceholder({
   onBack,
@@ -124,6 +125,7 @@ export function ListingDetailClient({ listingId }: { listingId: string }) {
   const router = useRouter();
   const user = usePortalAuth((state) => state.user);
   const token = usePortalAuth((state) => state.token);
+  const loadFromExisting = useListingStore((state) => state.loadFromExisting);
   const [detail, setDetail] = useState<ListingDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -166,6 +168,13 @@ export function ListingDetailClient({ listingId }: { listingId: string }) {
 
   const summaryDetail = useMemo(() => detail ?? undefined, [detail]);
 
+  const handleUpdateListing = () => {
+    if (detail) {
+      loadFromExisting(listingId, detail);
+      router.push('/listing/create');
+    }
+  };
+
   if (!user) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-muted/40 p-6">
@@ -188,8 +197,8 @@ export function ListingDetailClient({ listingId }: { listingId: string }) {
             Back to listings
           </Button>
           <div className="flex flex-wrap justify-end gap-2">
-            <Button variant="outline" asChild>
-              <Link href="/listing/create">Open create flow</Link>
+            <Button variant="outline" onClick={handleUpdateListing}>
+              Update this listing
             </Button>
           </div>
         </div>
@@ -485,8 +494,8 @@ export function ListingDetailClient({ listingId }: { listingId: string }) {
                 or change availability.
               </p>
               <div className="flex flex-wrap gap-2">
-                <Button variant="outline" asChild>
-                  <Link href="/listing/create">Update listing details</Link>
+                <Button variant="outline" onClick={handleUpdateListing}>
+                  Update listing details
                 </Button>
                 <Button asChild>
                   <Link href="/portal/listings">Return to portfolio</Link>

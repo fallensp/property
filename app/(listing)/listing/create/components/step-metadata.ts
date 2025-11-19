@@ -22,6 +22,10 @@ export const STEP_METADATA: Record<WizardStep, StepMetadata> = {
     title: 'Price',
     description: 'Capture pricing, maintenance, and display options.'
   },
+  marketingCopy: {
+    title: 'Marketing Copy',
+    description: 'Add a headline and description to your listing.'
+  },
   gallery: {
     title: 'Gallery',
     description: 'Curate listing media, set the cover image, and manage project assets.'

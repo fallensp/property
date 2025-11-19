@@ -164,14 +164,6 @@ export function PreviewStep(_: StepProps) {
         </Card>
       </section>
 
-      <section className="rounded-xl border border-border bg-background p-6 shadow-sm">
-        <h3 className="text-lg font-semibold">Next steps</h3>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Validate visuals and copy with stakeholders. Once approved, continue to
-          implementation where component wiring, validation states, and media
-          management will be completed.
-        </p>
-      </section>
     </div>
   );
 }

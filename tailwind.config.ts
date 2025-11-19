@@ -6,7 +6,7 @@ const config: Config = {
     './app/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
     './lib/**/*.{ts,tsx}',
-    './specs/001-create-listing-ui/**/*.{md}'
+    './specs/001-create-listing-ui/**/*.md'
   ],
   theme: {
     container: {

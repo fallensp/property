@@ -8,11 +8,12 @@ import { ListingTypeStep } from "@/app/(listing)/listing/create/components/steps
 import { LocationStep } from "@/app/(listing)/listing/create/components/steps/location-step";
 import { UnitDetailsStep } from "@/app/(listing)/listing/create/components/steps/unit-details-step";
 import { PriceStep } from "@/app/(listing)/listing/create/components/steps/price-step";
+import { MarketingCopyStep } from "@/app/(listing)/listing/create/components/steps/marketing-copy-step";
 import { PreviewStep } from "@/app/(listing)/listing/create/components/steps/preview-step";
 import { GalleryStep } from "@/app/(listing)/listing/create/components/steps/gallery-step";
 import { ValidationBanner } from "@/app/(listing)/listing/create/components/validation-banner";
 import { ValidationModeToggle } from "@/app/(listing)/listing/create/components/validation-mode-toggle";
-import { type WizardStep } from "@/app/(listing)/listing/create/state/listing-store";
+import { type WizardStep, useListingStore } from "@/app/(listing)/listing/create/state/listing-store";
 import { useListingWizard } from "@/app/(listing)/listing/create/hooks/use-listing-wizard";
 import { useListingSubmission } from "@/app/(listing)/listing/create/hooks/use-listing-submission";
 import { usePortalAuth } from "@/app/(portal)/portal/hooks/use-portal-auth";
@@ -24,6 +25,7 @@ const stepComponentMap: Record<WizardStep, StepComponent> = {
   location: LocationStep,
   unitDetails: UnitDetailsStep,
   price: PriceStep,
+  marketingCopy: MarketingCopyStep,
   gallery: GalleryStep,
   preview: PreviewStep,
   platform: PreviewStep
@@ -32,6 +34,8 @@ const stepComponentMap: Record<WizardStep, StepComponent> = {
 export default function ListingCreatePage() {
   const router = useRouter();
   const user = usePortalAuth((state) => state.user);
+  const draft = useListingStore((state) => state.draft);
+  const isUpdateMode = useListingStore((state) => state.isUpdateMode);
 
   const {
     currentStep,
@@ -97,6 +101,11 @@ export default function ListingCreatePage() {
         <div className="rounded-xl border border-border bg-background p-4 text-sm text-muted-foreground lg:hidden">
           Step {currentIndex + 1} of {stepOrder.length}: {metadata.title}
         </div>
+        {isUpdateMode && (
+          <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-800 dark:bg-amber-950 dark:text-amber-200">
+            <strong>Updating existing listing:</strong> {draft.propertyName} (ID: {draft.id})
+          </div>
+        )}
         <StepCard
           title={metadata.title}
           description={metadata.description}
@@ -117,8 +126,8 @@ export default function ListingCreatePage() {
           nextLabel={
             isLastStep
               ? isSaving
-                ? "Saving listing..."
-                : "Save listing"
+                ? isUpdateMode ? "Updating listing..." : "Saving listing..."
+                : isUpdateMode ? "Update listing" : "Save listing"
               : undefined
           }
           isNextDisabled={isLastStep ? isSaving : isNextDisabled}

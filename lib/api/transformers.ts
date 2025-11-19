@@ -105,8 +105,8 @@ export function toListingSummary(listing: ApiListing): ListingSummary {
     postedOn: createdAt ? formatDate(createdAt) : "—",
     listingType: listing.listing_type ?? "sale",
     category: (listing.category as ListingSummary["category"]) ?? "residential",
-    propertyType: listing.property_type?.name ?? listing.location?.propertyType ?? "Unassigned",
-    unitType: listing.property_unit_type?.name ?? listing.location?.propertyUnitType ?? undefined,
+    propertyType: (listing.property_type?.name as ListingSummary["propertyType"]) ?? "Bungalow / Villa",
+    unitType: (listing.property_unit_type?.name as ListingSummary["unitType"]) ?? "Prefer not to say",
     upgradeTiers: [],
     hasVideo: Boolean(listing.has_video),
     hasVirtualTour: Boolean(listing.has_virtual_tour),
@@ -138,17 +138,17 @@ export function toListingDetail(listing: ApiListing): ListingDetail {
       : undefined;
   const maintenanceFee =
     typeof metadata.maintenance_fee === "string" ||
-    typeof metadata.maintenance_fee === "number"
+      typeof metadata.maintenance_fee === "number"
       ? String(metadata.maintenance_fee)
       : "—";
   const pricePerSqft =
     typeof metadata.price_per_sqft === "string" ||
-    typeof metadata.price_per_sqft === "number"
+      typeof metadata.price_per_sqft === "number"
       ? String(metadata.price_per_sqft)
       : undefined;
   const furnishing =
-    typeof metadata.furnishing === "string"
-      ? (metadata.furnishing as ListingDetail["unit"]["furnishing"])
+    typeof attributeSource.furnishing === "string"
+      ? (attributeSource.furnishing as ListingDetail["unit"]["furnishing"])
       : "Unfurnished";
   const features = Array.isArray(metadata.features)
     ? (metadata.features as string[])

@@ -12,7 +12,7 @@ export class ApiError extends Error {
   }
 }
 
-export interface ApiRequestOptions extends RequestInit {
+export interface ApiRequestOptions extends Omit<RequestInit, 'body'> {
   token?: string | null;
   body?: unknown;
 }

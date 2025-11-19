@@ -60,20 +60,22 @@ export async function fetchListing(
   token: string,
   listingId: string,
 ): Promise<ApiListing> {
-  return apiFetch<ApiListing>(`/listings/${listingId}`, {
+  const response = await apiFetch<{ data: ApiListing }>(`/listings/${listingId}`, {
     token,
   });
+  return response.data;
 }
 
 export async function createListing(
   token: string,
   payload: ListingPayload,
 ): Promise<ApiListing> {
-  return apiFetch<ApiListing>("/listings", {
+  const response = await apiFetch<{ data: ApiListing }>("/listings", {
     method: "POST",
     token,
     body: payload,
   });
+  return response.data;
 }
 
 export async function updateListing(
@@ -81,11 +83,12 @@ export async function updateListing(
   listingId: string,
   payload: Partial<ListingPayload>,
 ): Promise<ApiListing> {
-  return apiFetch<ApiListing>(`/listings/${listingId}`, {
+  const response = await apiFetch<{ data: ApiListing }>(`/listings/${listingId}`, {
     method: "PATCH",
     token,
     body: payload,
   });
+  return response.data;
 }
 
 export async function deleteListing(token: string, listingId: string): Promise<void> {

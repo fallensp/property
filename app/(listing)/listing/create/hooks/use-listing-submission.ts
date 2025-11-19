@@ -7,7 +7,7 @@ import {
   type ListingDraft,
 } from "@/app/(listing)/listing/create/state/listing-store";
 import { usePortalAuth } from "@/app/(portal)/portal/hooks/use-portal-auth";
-import { createListing, type ListingPayload } from "@/lib/api/listings";
+import { createListing, updateListing, type ListingPayload } from "@/lib/api/listings";
 import { formatPrice } from "@/lib/utils/formatting";
 
 type SubmissionStatus = "idle" | "saving" | "success" | "error";
@@ -16,6 +16,7 @@ const DEFAULT_CURRENCY = "MYR";
 
 export function useListingSubmission() {
   const draft = useListingStore((state) => state.draft);
+  const isUpdateMode = useListingStore((state) => state.isUpdateMode);
   const resetDraft = useListingStore((state) => state.reset);
   const token = usePortalAuth((state) => state.token);
   const [status, setStatus] = useState<SubmissionStatus>("idle");
@@ -51,22 +52,41 @@ export function useListingSubmission() {
 
     const payload = buildListingPayload(draft);
 
+    if (typeof window !== 'undefined') {
+      // @ts-ignore
+      window.__payload = payload;
+      console.log('Submission Debug:', {
+        isUpdateMode,
+        draftId: draft.id,
+        willUpdate: isUpdateMode && draft.id,
+        action: isUpdateMode && draft.id ? 'UPDATE' : 'CREATE'
+      });
+    }
+
     setStatus("saving");
     setError(null);
     try {
-      await createListing(token, payload);
+      if (isUpdateMode && draft.id) {
+        console.log('Calling updateListing with ID:', draft.id);
+        await updateListing(token, draft.id, payload);
+      } else {
+        console.log('Calling createListing');
+        await createListing(token, payload);
+      }
       setStatus("success");
       resetDraft();
     } catch (err) {
       const message =
         err instanceof Error
           ? err.message
-          : "Unable to save the listing. Please try again.";
+          : isUpdateMode
+            ? "Unable to update the listing. Please try again."
+            : "Unable to save the listing. Please try again.";
       setError(message);
       setStatus("error");
       throw err;
     }
-  }, [draft, resetDraft, token]);
+  }, [draft, isUpdateMode, resetDraft, token]);
 
   return {
     submitDraft,

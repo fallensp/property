@@ -29,12 +29,13 @@ const TENURE_OPTIONS = ["Freehold", "Leasehold"];
 const BUMI_OPTIONS = ["Do not specify", "Yes", "No"];
 
 export function LocationStep({ errors }: StepProps) {
-  const { draft, updateLocation, updateLocationFields, updateListingType } = useListingStore(
+  const { draft, updateLocation, updateLocationFields, updateListingType, resolvePropertyTypeIds } = useListingStore(
     (state) => ({
       draft: state.draft,
       updateLocation: state.updateLocation,
       updateLocationFields: state.updateLocationFields,
-      updateListingType: state.updateListingType
+      updateListingType: state.updateListingType,
+      resolvePropertyTypeIds: state.resolvePropertyTypeIds
     })
   );
 
@@ -49,10 +50,18 @@ export function LocationStep({ errors }: StepProps) {
   const propertyTypes = usePropertyMetadataStore((state) => state.propertyTypes);
   const metadataStatus = usePropertyMetadataStore((state) => state.status);
   const fetchMetadata = usePropertyMetadataStore((state) => state.fetchMetadata);
+  const isUpdateMode = useListingStore((state) => state.isUpdateMode);
 
   useEffect(() => {
     fetchMetadata();
   }, [fetchMetadata]);
+
+  // Resolve property type IDs when metadata is loaded in update mode
+  useEffect(() => {
+    if (isUpdateMode && propertyTypes.length > 0 && location.propertyType) {
+      resolvePropertyTypeIds(propertyTypes);
+    }
+  }, [isUpdateMode, propertyTypes, location.propertyType, resolvePropertyTypeIds]);
 
   useEffect(() => {
     const timeout = window.setTimeout(() => {
