@@ -451,7 +451,7 @@ export function LocationStep({ errors }: StepProps) {
                     </Button>
                   ))}
                 </div>
-                <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="lease-years">
                       Lease years remaining (optional)
