@@ -18,6 +18,12 @@ test-results/
 .env.test.local
 .env.production.local
 
+# AWS Infrastructure (NEVER COMMIT THESE)
+infra/sensitive.txt
+infra/resources.txt
+infra/*.pem
+infra/.env
+
 # Logs
 logs/
 *.log

@@ -96,6 +96,51 @@ The app includes GitHub Pages deployment configuration:
 - Strict validation can be enabled via `NEXT_PUBLIC_LISTING_WIZARD_STRICT=true`
 - When disabled, allows bypassing validation for development/testing
 
+## AWS Infrastructure
+
+### AWS Profile Configuration
+**IMPORTANT**: This project uses a dedicated AWS CLI profile named `property` for all AWS operations.
+
+- **Profile Name**: `property`
+- **Region**: `ap-southeast-5` (Malaysia)
+- **Credentials Location**: `infra/sensitive.txt` (DO NOT COMMIT)
+
+### Using the AWS Profile
+When running AWS CLI commands, **ALWAYS** use the `--profile property` flag or set the environment variable:
+
+```bash
+# Method 1: Using --profile flag
+aws s3 ls --profile property
+
+# Method 2: Setting environment variable (recommended for scripts)
+export AWS_PROFILE=property
+aws s3 ls
+```
+
+### Infrastructure Resources
+All AWS resources are documented in `infra/`:
+- **`infra/README.md`** - Quick start guide and overview
+- **`infra/plan.md`** - Detailed infrastructure architecture
+- **`infra/resources.txt`** - Created resource IDs and credentials (DO NOT COMMIT)
+- **`infra/setup.sh`** - Automated setup script
+- **`infra/forge-setup.md`** - Laravel Forge integration guide
+
+### Key Resources
+- **EC2 Server**: Ubuntu 22.04 t3.small instance
+- **RDS Database**: PostgreSQL 15, db.t3.micro
+- **S3 Buckets**:
+  - `property-media-509852960936` - Property images/videos
+  - `property-static-509852960936` - Static assets
+  - `property-backups-509852960936` - Backups
+- **Server IP**: Check `infra/resources.txt` for `ELASTIC_IP`
+
+### Security Notes
+Files to NEVER commit to git:
+- `infra/sensitive.txt` - AWS root credentials
+- `infra/resources.txt` - Resource IDs and passwords
+- `infra/*.pem` - SSH private keys
+- `.env` - Application environment variables
+
 ## Testing Strategy
 
 ### Unit Testing (Vitest)

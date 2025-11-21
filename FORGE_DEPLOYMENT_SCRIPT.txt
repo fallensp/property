@@ -1,0 +1,87 @@
+#!/bin/bash
+# ============================================
+# Laravel Forge Deployment Script
+# Property Listing Application
+# ============================================
+# IMPORTANT: Copy this entire script into your Forge deployment configuration
+# Location: Forge Dashboard → Site → Deployments → Deploy Script
+
+set -e
+
+cd $FORGE_SITE_PATH/releases/$FORGE_RELEASE
+
+echo "🚀 Starting deployment of release $FORGE_RELEASE"
+
+# ==========================================
+# PART 1: Next.js Frontend
+# ==========================================
+echo ""
+echo "📦 Installing Next.js dependencies..."
+npm ci --prefer-offline --no-audit
+
+echo "🔨 Building Next.js application..."
+npm run build
+
+# ==========================================
+# PART 2: Laravel Backend API
+# ==========================================
+echo ""
+echo "🔧 Configuring Laravel Backend..."
+cd backend/api
+
+echo "📦 Installing Laravel dependencies..."
+composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+
+echo "🔗 Creating .env symlink for Laravel..."
+# CRITICAL: This symlink allows Laravel to read the .env from site root
+rm -f .env
+ln -sf ../../../../.env .env
+
+echo "✓ .env symlink created"
+
+echo "🧹 Clearing Laravel caches..."
+php artisan config:clear || true
+php artisan cache:clear || true
+php artisan route:clear || true
+php artisan view:clear || true
+
+echo "⚙️  Caching Laravel configuration..."
+php artisan config:cache
+php artisan route:cache || true
+php artisan view:cache || true
+
+echo "📊 Running database migrations..."
+php artisan migrate --force
+
+echo "🔄 Optimizing Laravel..."
+php artisan optimize || true
+
+echo "🔗 Creating storage symlink..."
+php artisan storage:link || true
+
+# ==========================================
+# PART 3: Finalize Deployment
+# ==========================================
+cd $FORGE_SITE_PATH
+
+echo ""
+echo "🔗 Updating current symlink to release $FORGE_RELEASE..."
+ln -sfn releases/$FORGE_RELEASE current
+
+echo "🔄 Reloading PHP-FPM..."
+sudo systemctl reload php8.2-fpm
+
+# Restart Next.js with PM2 (if using PM2)
+if command -v pm2 &> /dev/null; then
+    echo "🔄 Restarting Next.js with PM2..."
+    cd current
+    pm2 delete property-app || true
+    pm2 start npm --name "property-app" -- start
+    pm2 save
+fi
+
+echo ""
+echo "✅ Deployment complete!"
+echo "📝 Release: $FORGE_RELEASE"
+echo "🗄️  Database: AWS RDS PostgreSQL"
+echo "🌐 Next.js: http://43.217.181.191"
