@@ -125,6 +125,7 @@ class AdminAgentController extends Controller
             ->paginate($request->integer('per_page', 50));
 
         $data = $agents->getCollection()->map(function (Agent $agent) {
+            $watermarkUrl = $this->watermarkService->generateAgentWatermark($agent);
             return [
                 'id' => $agent->id,
                 'full_name' => $agent->full_name,
@@ -134,6 +135,7 @@ class AdminAgentController extends Controller
                 'user_id' => $agent->user_id,
                 'status' => $agent->status,
                 'user_name' => $agent->user?->name,
+                'watermark_url' => $watermarkUrl,
             ];
         })->values();
 
@@ -154,6 +156,7 @@ class AdminAgentController extends Controller
         abort_if(! $user || ($user->id !== 1 && $user->role !== 'admin'), 403, 'Forbidden');
 
         $agent->loadMissing('user');
+        $watermarkUrl = $this->watermarkService->generateAgentWatermark($agent);
 
         return response()->json([
             'agent' => [
@@ -165,6 +168,7 @@ class AdminAgentController extends Controller
                 'user_id' => $agent->user_id,
                 'user_name' => $agent->user?->name,
                 'status' => $agent->status,
+                'watermark_url' => $watermarkUrl,
             ],
         ]);
     }

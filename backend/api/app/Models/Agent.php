@@ -25,6 +25,7 @@ class Agent extends Model
         'license_number',
         'status',
         'metadata',
+        'watermark_path',
     ];
 
     protected $casts = [
