@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             ['email' => 'agent@example.com'],
             [
                 'name' => 'Portal Agent',
+                'role' => 'agent',
                 'password' => Hash::make('password'),
             ]
         );
@@ -35,5 +36,14 @@ class DatabaseSeeder extends Seeder
             $agent->user_id = $user->id;
             $agent->save();
         }
+
+        User::query()->updateOrCreate(
+            ['email' => 'user@example.com'],
+            [
+                'name' => 'Property User',
+                'role' => 'user',
+                'password' => Hash::make('password'),
+            ]
+        );
     }
 }

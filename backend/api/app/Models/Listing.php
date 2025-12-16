@@ -24,6 +24,7 @@ class Listing extends Model
         'property_type_id',
         'property_sub_type_id',
         'property_unit_type_id',
+        'neighbourhood_id',
         'title',
         'reference_number',
         'status',
@@ -87,6 +88,11 @@ class Listing extends Model
     public function propertyUnitType(): BelongsTo
     {
         return $this->belongsTo(PropertyUnitType::class);
+    }
+
+    public function neighbourhood(): BelongsTo
+    {
+        return $this->belongsTo(Neighbourhood::class);
     }
 
     public function location(): HasOne
