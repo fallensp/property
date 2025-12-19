@@ -1,0 +1,369 @@
+openapi: 3.1.0
+info:
+  title: Listing Wizard Mock Interface
+  version: 0.1.0
+  description: >
+    Placeholder contract describing the anticipated backend integration for the listing creation wizard.
+    Current implementation uses in-memory mock data; endpoints are documented for future alignment.
+servers:
+  - url: https://mock.local/api
+paths:
+  /listings/drafts:
+    post:
+      summary: Create a listing draft from wizard payload
+      description: Accepts the full ListingDraft object for persistence.
+      operationId: createListingDraft
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListingDraft'
+      responses:
+        '201':
+          description: Draft created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListingDraft'
+        '400':
+          description: Validation errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrors'
+  /listings/drafts/{id}:
+    get:
+      summary: Retrieve a listing draft
+      operationId: getListingDraft
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Draft retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListingDraft'
+        '404':
+          description: Draft not found
+    put:
+      summary: Update a listing draft
+      operationId: updateListingDraft
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListingDraft'
+      responses:
+        '200':
+          description: Draft updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListingDraft'
+        '400':
+          description: Validation errors
+        '404':
+          description: Draft not found
+  /listings/publish:
+    post:
+      summary: Publish a completed listing
+      operationId: publishListing
+      description: Publishes a validated draft to external platforms.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - draftId
+              properties:
+                draftId:
+                  type: string
+      responses:
+        '202':
+          description: Publish accepted for processing
+        '409':
+          description: Draft not in publishable state
+components:
+  schemas:
+    ListingDraft:
+      type: object
+      required:
+        - id
+        - propertyCategory
+        - listingPurpose
+        - availabilityMode
+        - location
+        - unitDetails
+        - pricing
+        - headline
+        - description
+        - media
+        - platformSettings
+      properties:
+        id:
+          type: string
+          format: uuid
+        propertyCategory:
+          type: string
+          enum: [residential, commercial, industrial]
+        listingPurpose:
+          type: string
+          enum: [sale, rent]
+        referenceNumber:
+          type: string
+          maxLength: 250
+          nullable: true
+        location:
+          $ref: '#/components/schemas/LocationSelection'
+        unitDetails:
+          $ref: '#/components/schemas/UnitDetails'
+        pricing:
+          $ref: '#/components/schemas/Pricing'
+        headline:
+          type: string
+          minLength: 10
+          maxLength: 70
+        description:
+          type: string
+          minLength: 20
+          maxLength: 2000
+        media:
+          $ref: '#/components/schemas/MediaCollection'
+        platformSettings:
+          $ref: '#/components/schemas/PlatformSettings'
+        validation:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/StepStatus'
+        updatedAt:
+          type: string
+          format: date-time
+    LocationSelection:
+      type: object
+      required:
+        - developmentName
+      properties:
+        searchTerm:
+          type: string
+        developmentName:
+          type: string
+        address:
+          type: string
+          nullable: true
+        latitude:
+          type: number
+          nullable: true
+        longitude:
+          type: number
+          nullable: true
+        propertyType:
+          type: string
+        propertySubType:
+          type: string
+        propertyUnitType:
+          type: string
+        state:
+          type: string
+        city:
+          type: string
+        street:
+          type: string
+        postalCode:
+          type: string
+        tenure:
+          type: string
+        completionYear:
+          type: string
+        titleType:
+          type: string
+        leaseYearsRemaining:
+          type: string
+        bumiLot:
+          type: string
+    UnitDetails:
+      type: object
+      required:
+        - bedrooms
+        - bathrooms
+        - builtUp
+        - furnishing
+      properties:
+        bedrooms:
+          type: integer
+          minimum: 0
+        bathrooms:
+          type: integer
+          minimum: 0
+        maidRooms:
+          type: integer
+          minimum: 0
+          nullable: true
+        builtUp:
+          type: number
+          minimum: 0
+        builtUpWidth:
+          type: number
+          nullable: true
+          minimum: 0
+        builtUpLength:
+          type: number
+          nullable: true
+          minimum: 0
+        block:
+          type: string
+          nullable: true
+        floor:
+          type: string
+          nullable: true
+        unitNumber:
+          type: string
+          nullable: true
+        hideLocationDetails:
+          type: boolean
+        parkingSpots:
+          type: integer
+          minimum: 0
+          nullable: true
+        furnishing:
+          type: string
+          enum: [fully, partial, unfurnished]
+        features:
+          type: array
+          items:
+            type: string
+    Pricing:
+      type: object
+      required:
+        - sellingPrice
+      properties:
+        priceType:
+          type: string
+          enum: [none, negotiable, fixed, poa]
+        sellingPrice:
+          type: number
+          minimum: 0
+        maintenanceFee:
+          type: number
+          minimum: 0
+          nullable: true
+        pricePerSqft:
+          type: number
+          minimum: 0
+          nullable: true
+    MediaCollection:
+      type: object
+      required:
+        - photos
+      properties:
+        photos:
+          type: array
+          minItems: 5
+          items:
+            $ref: '#/components/schemas/MediaAsset'
+        videos:
+          type: array
+          items:
+            $ref: '#/components/schemas/MediaAsset'
+        floorplans:
+          type: array
+          items:
+            $ref: '#/components/schemas/MediaAsset'
+        virtualTours:
+          type: array
+          items:
+            $ref: '#/components/schemas/MediaAsset'
+        projectPhotos:
+          type: array
+          items:
+            $ref: '#/components/schemas/MediaAsset'
+    MediaAsset:
+      type: object
+      required:
+        - id
+        - type
+        - fileName
+        - url
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum: [photo, video, floorplan, virtualTour]
+        fileName:
+          type: string
+        url:
+          type: string
+          format: uri
+        thumbnailUrl:
+          type: string
+          format: uri
+          nullable: true
+        sizeBytes:
+          type: integer
+          minimum: 0
+        altText:
+          type: string
+          nullable: true
+        order:
+          type: integer
+          minimum: 0
+    PlatformSettings:
+      type: object
+      required:
+        - publishIProperty
+        - publishPropertyGuru
+        - boost
+        - scheduledPublish
+      properties:
+        publishIProperty:
+          type: boolean
+        publishPropertyGuru:
+          type: boolean
+        boost:
+          type: boolean
+        scheduledPublish:
+          type: boolean
+        scheduledDate:
+          type: string
+          format: date-time
+          nullable: true
+    StepStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [not-started, in-progress, complete, blocked]
+        errors:
+          type: array
+          items:
+            type: string
+    ValidationErrors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            required:
+              - field
+              - message
+            properties:
+              field:
+                type: string
+              message:
+                type: string

@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 0 0% 100%;
+  --foreground: 224 71.4% 4.1%;
+  --muted: 220 14.3% 95.9%;
+  --muted-foreground: 220 8.9% 46.1%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 224 71.4% 4.1%;
+  --border: 220 13% 91%;
+  --input: 220 13% 91%;
+  --card: 0 0% 100%;
+  --card-foreground: 224 71.4% 4.1%;
+  --primary: 12 95% 54%;
+  --primary-foreground: 210 20% 98%;
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222 47% 11%;
+  --accent: 210 40% 96%;
+  --accent-foreground: 222 47% 11%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 210 20% 98%;
+  --ring: 12 95% 54%;
+  --radius: 0.75rem;
+}
+
+.dark {
+  --background: 0 0% 5.9%;
+  --foreground: 214 30.4% 95.5%;
+  --muted: 0 0% 11%;
+  --muted-foreground: 207 16.7% 71.8%;
+  --border: 0 0% 17.3%;
+  --input: 0 0% 17.3%;
+  --popover: 0 0% 11%;
+  --popover-foreground: 214 30.4% 95.5%;
+  --card: 0 0% 11%;
+  --card-foreground: 214 30.4% 95.5%;
+  --primary: 48 100% 50%;
+  --primary-foreground: 0 0% 5.9%;
+  --secondary: 271 69.8% 59.8%;
+  --secondary-foreground: 214 30.4% 95.5%;
+  --accent: 48 100% 50%;
+  --accent-foreground: 0 0% 5.9%;
+  --destructive: 0 63.6% 49.6%;
+  --destructive-foreground: 214 30.4% 95.5%;
+  --ring: 48 100% 50%;
+}
+
+body {
+  min-height: 100vh;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+.heading-accent {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
